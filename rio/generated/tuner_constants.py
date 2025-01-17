@@ -21,7 +21,9 @@ class TunerConstants:
         .with_k_s(0.1)
         .with_k_v(3.1)
         .with_k_a(0)
-        .with_static_feedforward_sign(signals.StaticFeedforwardSignValue.USE_CLOSED_LOOP_SIGN)
+        .with_static_feedforward_sign(
+            signals.StaticFeedforwardSignValue.USE_CLOSED_LOOP_SIGN
+        )
     )
     # When using closed-loop control, the drive motor uses the control
     # output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
@@ -102,7 +104,11 @@ class TunerConstants:
         .with_pigeon2_configs(_pigeon_configs)
     )
 
-    _constants_creator: swerve.SwerveModuleConstantsFactory[configs.TalonFXConfiguration, configs.TalonFXConfiguration, configs.CANcoderConfiguration] = (
+    _constants_creator: swerve.SwerveModuleConstantsFactory[
+        configs.TalonFXConfiguration,
+        configs.TalonFXConfiguration,
+        configs.CANcoderConfiguration,
+    ] = (
         swerve.SwerveModuleConstantsFactory()
         .with_drive_motor_gear_ratio(_drive_gear_ratio)
         .with_steer_motor_gear_ratio(_steer_gear_ratio)
@@ -125,7 +131,6 @@ class TunerConstants:
         .with_steer_friction_voltage(_steer_friction_voltage)
         .with_drive_friction_voltage(_drive_friction_voltage)
     )
-
 
     # Front Left
     _front_left_drive_motor_id = 28
@@ -170,7 +175,6 @@ class TunerConstants:
 
     _back_right_x_pos: units.meter = inchesToMeters(-11.75)
     _back_right_y_pos: units.meter = inchesToMeters(-11.75)
-
 
     front_left = _constants_creator.create_module_constants(
         _front_left_steer_motor_id,

@@ -141,8 +141,15 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain):
     ):
         Subsystem.__init__(self)
         swerve.SwerveDrivetrain.__init__(
-            self, drive_motor_type, steer_motor_type, encoder_type,
-            drivetrain_constants, arg0, arg1, arg2, arg3
+            self,
+            drive_motor_type,
+            steer_motor_type,
+            encoder_type,
+            drivetrain_constants,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
         )
 
         self._sim_notifier: Notifier | None = None
