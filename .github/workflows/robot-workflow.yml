@@ -1,0 +1,121 @@
+name: Robot Workflow
+
+on:
+  push:
+    branches:
+      - "main"
+    tags:
+      - "*"
+  pull_request:
+
+jobs:
+  formatblack:
+    name: Style Check Code with Black
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check files using the black formatter
+        uses: rickstaa/action-black@v1.3.0
+        id: action_black
+        with:
+          black_args: "."
+
+      - name: Annotate diff changes using reviewdog
+        if: steps.action_black.outputs.is_formatted == 'true'
+        uses: reviewdog/action-suggester@v1.3.0
+        with:
+          tool_name: blackfmt
+
+      - name: Fail if actions taken
+        if: steps.action_black.outputs.is_formatted == 'true'
+        run: exit 1
+
+      - name: Send Discord notification on failure
+        if: ${{ failure() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Black formatter reported errors in ${{ github.event.pull_request.html_url }}!"
+
+  run_simulator:
+    name: Run the WPIlib Simulator
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+
+      - name: Cache pipenv environment
+        id: cache-pipenv
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('rio/Pipfile.lock') }}
+
+      - name: Install dependencies
+        run: |
+          cd rio && pipenv install --deploy --dev
+
+      - name: Timeout and run the simulator
+        run: |
+          cd rio && timeout 20 pipenv run python -m robotpy sim --nogui || code=$?; \
+          if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+
+      - name: Send Discord notification on failure
+        if: ${{ failure() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "<@614313406345904148> Simulator failed in ${{ github.event.pull_request.html_url }}!"
+
+  unit_test:
+    name: pyfrc Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+
+      - name: Cache pipenv environment
+        id: cache-pipenv
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('rio/Pipfile.lock') }}
+
+      - name: Install dependencies
+        run: |
+          cd rio && pipenv install --deploy --dev
+
+      - name: Run unit tests
+        run: |
+          cd rio && pipenv run python -m robotpy test -- -vs || code=$?; \
+          if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+
+      - name: Send Discord notification on failure
+        if: ${{ failure() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "<@614313406345904148> Unit tests failed in ${{ github.event.pull_request.html_url }}!"
