@@ -10,7 +10,8 @@ import commands2.cmd
 from commands2.sysid import SysIdRoutine
 
 from generated.tuner_constants import TunerConstants
-from telemetry import Telemetry
+
+# from telemetry import Telemetry
 
 from phoenix6 import swerve
 from wpimath.geometry import Rotation2d
@@ -37,9 +38,7 @@ class RobotContainer:
         self._drive = (
             swerve.requests.FieldCentric()
             .with_deadband(self._max_speed * 0.1)
-            .with_rotational_deadband(
-                self._max_angular_rate * 0.1
-            )  # Add a 10% deadband
+            .with_rotational_deadband(self._max_angular_rate * 0)  # Add a 10% deadband
             .with_drive_request_type(
                 swerve.SwerveModule.DriveRequestType.OPEN_LOOP_VOLTAGE
             )  # Use open-loop control for drive motors
@@ -47,7 +46,7 @@ class RobotContainer:
         self._brake = swerve.requests.SwerveDriveBrake()
         self._point = swerve.requests.PointWheelsAt()
 
-        self._logger = Telemetry(self._max_speed)
+        # self._logger = Telemetry(self._max_speed)
 
         self._joystick = commands2.button.CommandXboxController(0)
 
@@ -111,9 +110,9 @@ class RobotContainer:
             self.drivetrain.runOnce(lambda: self.drivetrain.seed_field_centric())
         )
 
-        self.drivetrain.register_telemetry(
-            lambda state: self._logger.telemeterize(state)
-        )
+        # self.drivetrain.register_telemetry(
+        #     lambda state: self._logger.telemeterize(state)
+        # )
 
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
