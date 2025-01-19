@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+ctre_sim/
+simgui*.json
+networktables.json
