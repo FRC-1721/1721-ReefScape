@@ -14,7 +14,7 @@ class Robot(MagicRobot):
     swerve: Swerve
 
     def createObjects(self):
-        self.controller = wpilib.GenericHID(0)
+        self.controller = wpilib.interfaces.GenericHID(0)
 
     def teleopPeriodic(self):
         self.swerve.go(
