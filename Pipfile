@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+wpilib = "2025.2.1"
+robotpy = "2025.2.1.0"
+phoenix6 = "25.2.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"
