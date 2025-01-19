@@ -64,4 +64,3 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     # ran automatically (periodic)
     def execute(self):
         self.set_control(self.request)
-        print(self.get_state().module_targets[0].speed)
