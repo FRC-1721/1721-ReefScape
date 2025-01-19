@@ -51,7 +51,8 @@ _encoder_class = hardware.CANcoder
 
 # The remote sensor feedback type to use for the steer motors;
 # When not Pro-licensed, FusedCANcoder/SyncCANcoder automatically fall back to RemoteCANcoder
-_steer_feedback_type = swerve.SteerFeedbackType.FUSED_CANCODER
+# _steer_feedback_type = swerve.SteerFeedbackType.FUSED_CANCODER
+_steer_feedback_type = swerve.SteerFeedbackType.REMOTE_CANCODER
 
 # The stator current at which the wheels start to slip;
 # This needs to be tuned to your individual robot
@@ -89,7 +90,7 @@ _wheel_radius: units.meter = inchesToMeters(2)
 _invert_left_side = False
 _invert_right_side = True
 
-_pigeon_id = 1
+_pigeon_id = 39
 
 # These are only used for simulation
 _steer_inertia: units.kilogram_square_meter = 0.01
@@ -134,8 +135,8 @@ _constants_creator: swerve.SwerveModuleConstantsFactory[
 )
 
 front_left = _constants_creator.create_module_constants(
-    28,  # front_left.drive_motor_id
     1,  # front_left.steer_motor_id
+    28,  # front_left.drive_motor_id
     13,  # front_left.encoder_id
     -0.417724609375,  # front_left.encoder_offset: units.rotation
     inchesToMeters(11.75),  # front_left.location_x: units.meter
@@ -145,8 +146,8 @@ front_left = _constants_creator.create_module_constants(
     False,  # front_left.encoder_inverted
 )
 front_right = _constants_creator.create_module_constants(
-    3,  # front_right.drive_motor_id
     5,  # front_right.steer_motor_id
+    3,  # front_right.drive_motor_id
     41,  # front_right.encoder_id
     -0.197998046875,  # front_right.encoder_offset: units.rotation
     inchesToMeters(11.75),  # front_right.location_x: units.meter
@@ -156,8 +157,8 @@ front_right = _constants_creator.create_module_constants(
     False,  # front_right.encoder_inverted
 )
 back_left = _constants_creator.create_module_constants(
-    12,  # back_left.drive_motor_id
     62,  # back_left.steer_motor_id
+    12,  # back_left.drive_motor_id
     40,  # back_left.encoder_id
     -0.393310546875,  # back_left.encoder_offset: units.rotation
     inchesToMeters(-11.75),  # back_left.location_x: units.meter
@@ -167,8 +168,8 @@ back_left = _constants_creator.create_module_constants(
     False,  # back_left.encoder_inverted
 )
 back_right = _constants_creator.create_module_constants(
-    2,  # back_right.drive_motor_id
     8,  # back_right.steer_motor_id
+    2,  # back_right.drive_motor_id
     9,  # back_right.encoder_id
     -0.1513671875,  # back_right.encoder_offset: units.rotation
     inchesToMeters(-11.75),  # back_right.location_x: units.meter
