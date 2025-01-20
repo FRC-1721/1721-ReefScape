@@ -3,7 +3,7 @@ import wpilib
 import logging
 
 from wpilib import Field2d
-from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d, Twist2d
 from wpimath.kinematics import SwerveDrive4Kinematics, SwerveModuleState
 
 from constant import TunerConstants, DriveConstants
@@ -12,6 +12,7 @@ from constant import TunerConstants, DriveConstants
 class PhysicsEngine:
     def __init__(self, physics_controller):
         self.physics_controller = physics_controller
+        self.swerve = None
 
         # Define the swerve module locations from constants
         self.module_locations = [
@@ -33,35 +34,18 @@ class PhysicsEngine:
         wpilib.SmartDashboard.putData("Field", self.field)
 
     def update_sim(self, now, timestep):
-        try:
-            swerve = self.physics_controller.swerve
-        except AttributeError:
-            wpilib.reportWarning("Swerve subsystem not yet initialized!", False)
-            return
+        # Simulate simple linear and rotational motion
+        linear_speed = 2.0  # meters per second
+        angular_speed = math.radians(45)  # radians per second (45 degrees per second)
 
-        # Fetch chassis speeds from the swerve subsystem
-        chassis_speeds = swerve.get_chassis_speeds()
+        # Calculate the change in position and rotation
+        dx = linear_speed * timestep
+        dy = 0  # No sideways motion for simplicity
+        dtheta = angular_speed * timestep
 
-        # Calculate module states (kinematics only, no motor dynamics)
-        module_states = self.swerve_kinematics.toSwerveModuleStates(chassis_speeds)
-        SwerveDrive4Kinematics.desaturateWheelSpeeds(
-            module_states, DriveConstants.max_speed
-        )
+        # Use Twist2d for pose updates
+        twist = Twist2d(dx, dy, dtheta)
+        self.robot_pose = self.robot_pose.exp(twist)
 
-        # Simulate the robot pose over the timestep
-        delta_pose = Pose2d(
-            chassis_speeds.vx * timestep,
-            chassis_speeds.vy * timestep,
-            Rotation2d(chassis_speeds.omega * timestep),
-        )
-        self.robot_pose = self.robot_pose + delta_pose
-
-        # Update Field2d and NetworkTables for visualization
+        # Update Field2d for visualization
         self.field.setRobotPose(self.robot_pose)
-        nt = wpilib.NetworkTableInstance.getDefault()
-        pose_table = nt.getTable("Pose")
-        pose_table.putNumber("X", self.robot_pose.X())
-        pose_table.putNumber("Y", self.robot_pose.Y())
-        pose_table.putNumber(
-            "Heading", math.degrees(self.robot_pose.rotation().radians)
-        )

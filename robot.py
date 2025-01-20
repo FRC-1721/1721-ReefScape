@@ -73,12 +73,3 @@ class Robot(MagicRobot):
 
         if self.controller.getRawButton(1):
             self.swerve.brake()
-
-    def simulationInit(self):
-        logging.warning("Running in simulation mode!")
-        self.physics = PhysicsEngine(self)
-
-    def simulationPeriodic(self):
-        # Update physics simulation if running in simulation
-        if self.physics:
-            self.physics.update_sim(wpilib.Timer.getFPGATimestamp(), 0.02)
