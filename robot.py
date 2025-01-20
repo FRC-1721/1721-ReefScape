@@ -26,7 +26,12 @@ class Robot(MagicRobot):
         )
 
         try:
-            self.trajectory = choreo.load_swerve_trajectory("path1")
+            # Latest version only needs this, but pypi doesn't have that
+            # version, so when it breaks you can use this line instead
+            # self.trajectory = choreo.load_swerve_trajectory("path1")
+            self.trajectory = choreo.load_swerve_trajectory(
+                os.path.join(wpilib.getDeployDirectory(), "choreo", "path2")
+            )
         except ValueError:
             self.trajectory = None
 
