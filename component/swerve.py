@@ -70,6 +70,19 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
             *self.controller.calculate(self.get_state().pose, goal, velocity, facing)
         )
 
+    # for choreo
+    def trajectory(self, sample):
+        pose = self.get_state().pose
+
+        self.go(
+            sample.vx + self.controller.getXController().calculate(pose.X(), sample.x),
+            sample.vy + self.controller.getXController().calculate(pose.Y(), sample.y),
+            sample.omega
+            + self.controller.getThetaController().calculate(
+                pose.rotation().radians(), sample.heading
+            ),
+        )
+
     def brake(self):
         self.request = phoenix6.swerve.requests.SwerveDriveBrake()
 
@@ -79,6 +92,7 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
             direction
         )
 
+    # set a phoenix6.swerve.requests.SwerveRequest manually
     def set(self, request: phoenix6.swerve.requests.SwerveRequest):
         self.request = request
 

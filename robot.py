@@ -3,6 +3,7 @@
 import wpilib, wpimath, wpimath.geometry
 import phoenix6
 from magicbot import MagicRobot
+import choreo
 
 from constant import TunerConstants, DriveConstants
 
@@ -19,6 +20,15 @@ class Robot(MagicRobot):
         self.controller = wpilib.interfaces.GenericHID(0)
         self.gyro = phoenix6.hardware.Pigeon2(TunerConstants._pigeon_id)
         self.nt = NetworkTableInstance.getDefault()
+        self.is_red = (
+            lambda: wpilib.DriverStation.getAlliance()
+            == wpilib.DriverStation.Alliance.kRed
+        )
+
+        try:
+            self.trajectory = choreo.load_swerve_trajectory("path1")
+        except ValueError:
+            self.trajectory = None
 
     def teleopPeriodic(self):
         # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
@@ -45,7 +55,7 @@ class Robot(MagicRobot):
         #     )
         #     self.swerve.add_vision_measurement(
         #         wpimath.geometry.Pose2d(
-        #             TODO
+        #             TODO update robot pose based on AprilTags
         #         ),
         #         phoenix6.utils.get_current_time_seconds(),
         #     )

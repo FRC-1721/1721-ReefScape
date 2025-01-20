@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "836038907b6bdfaa583bff615fee47d696b032b4dea781d928aadc56ef5b73a4"
+            "sha256": "fad8bafd33273afdf8e19020bf7c718713e4879fc021fe02d6e9fca4049bcbef"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -451,6 +451,15 @@
             ],
             "markers": "python_version >= '3.9'",
             "version": "==75.8.0"
+        },
+        "sleipnirgroup-choreolib": {
+            "hashes": [
+                "sha256:0895d09a23fb4e1b1699ded4a20c70c59c08a8a41cb9c855eb2ebde76295aa0d",
+                "sha256:9a45e3bc5b0ea2b6b195f144ac20526c69c56ed39da23b439c1c45fc0c1aba5f"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.9'",
+            "version": "==2025.0.1"
         },
         "tomli": {
             "hashes": [
