@@ -73,8 +73,11 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     def brake(self):
         self.request = phoenix6.swerve.requests.SwerveDriveBrake()
 
-    def point(self):
-        self.request = phoenix6.swerve.requests.PointWheelsAt()
+    # wpimath.geometry.Rotation2d ?
+    def point(self, direction: phoenix6.swerve.Rotation2d):
+        self.request = phoenix6.swerve.requests.PointWheelsAt().with_module_direction(
+            direction
+        )
 
     def set(self, request: phoenix6.swerve.requests.SwerveRequest):
         self.request = request
