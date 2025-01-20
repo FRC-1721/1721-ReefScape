@@ -39,3 +39,6 @@ install-python:	## Install python (for robot)
 
 clean:	## Clean the repo
 	git clean -fdX
+
+todo:	## find todo comments
+	@rg -p -o "# *TODO ?:? ?(.*)\$$" -r " \$$1"

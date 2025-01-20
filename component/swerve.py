@@ -14,7 +14,7 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
         phoenix6.swerve.requests.Idle()
     )  # default request if no request is given
 
-    # TODO: Adjust PIDs?
+    # TODO Adjust PIDs?
     controller = wpimath.controller.HolonomicDriveController(
         wpimath.controller.PIDController(1, 0, 0),
         wpimath.controller.PIDController(1, 0, 0),

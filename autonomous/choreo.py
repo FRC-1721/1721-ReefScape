@@ -13,8 +13,8 @@ class ChoreoAuto(AutonomousStateMachine):
     DISABLED = False
 
     swerve: Swerve
-    trajectory: ...  # TODO what is the correct type
-    is_red: ...  # TODO what is the correct type
+    trajectory: ...  # TODO find correct type annotation
+    is_red: ...  # TODO find correct type annotation
 
     @state(first=True)
     def packages(self, state_tm):
