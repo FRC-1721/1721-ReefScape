@@ -1,19 +1,37 @@
 #!/usr/bin/env python3
 
+# Libs
+import logging
 import wpilib, wpimath, wpimath.geometry
 import phoenix6
 from magicbot import MagicRobot
+from ntcore import NetworkTableInstance
 
+# Constants
 from constant import TunerConstants, DriveConstants
 
+# Components
 from component.swerve import Swerve
 
-from ntcore import NetworkTableInstance
+# Sim
+from physics import PhysicsEngine
 
 
 class Robot(MagicRobot):
 
     swerve: Swerve
+
+    def robotInit(self):
+        super().robotInit()
+
+        # Configure logging
+        logging.basicConfig(
+            level=logging.INFO if wpilib.RobotBase.isSimulation() else logging.DEBUG,
+            format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+        self.logger = logging.getLogger("Robot")
+        self.logger.info("Robot is initializing...")
 
     def createObjects(self):
         self.controller = wpilib.interfaces.GenericHID(0)
@@ -55,3 +73,12 @@ class Robot(MagicRobot):
 
         if self.controller.getRawButton(1):
             self.swerve.brake()
+
+    def simulationInit(self):
+        logging.warning("Running in simulation mode!")
+        self.physics = PhysicsEngine(self)
+
+    def simulationPeriodic(self):
+        # Update physics simulation if running in simulation
+        if self.physics:
+            self.physics.update_sim(wpilib.Timer.getFPGATimestamp(), 0.02)
