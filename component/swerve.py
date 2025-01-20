@@ -4,8 +4,6 @@ import phoenix6
 
 from magicbot import feedback, will_reset_to
 
-from wpimath.kinematics import ChassisSpeeds
-
 from constant import TunerConstants, DriveConstants
 
 
@@ -42,8 +40,6 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
 
         if phoenix6.utils.is_simulation():
             ...
-
-        self.current_speeds = ChassisSpeeds(0, 0, 0)
 
     def go(self, x, y, z, field_centric=False):  # convenience
         self.request = (
@@ -85,9 +81,6 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
 
     def set(self, request: phoenix6.swerve.requests.SwerveRequest):
         self.request = request
-
-    def get_chassis_speeds(self):
-        return self.current_speeds
 
     # these values are pushed to NetworkTables
     @feedback

@@ -1,18 +1,17 @@
 import math
 import wpilib
-import logging
 
 from wpilib import Field2d
-from wpimath.geometry import Pose2d, Rotation2d, Translation2d, Twist2d
-from wpimath.kinematics import SwerveDrive4Kinematics, SwerveModuleState
-
-from constant import TunerConstants, DriveConstants
+from pyfrc.physics.core import PhysicsInterface
+from wpimath.geometry import Pose2d, Rotation2d, Twist2d, Translation2d
+from wpimath.kinematics import SwerveDrive4Kinematics
+from constant import TunerConstants
 
 
 class PhysicsEngine:
-    def __init__(self, physics_controller):
+    def __init__(self, physics_controller: PhysicsInterface, robot: "UnnamedToaster"):
         self.physics_controller = physics_controller
-        self.swerve = None
+        self.swerve = robot.swerve  # component/swerve.py
 
         # Define the swerve module locations from constants
         self.module_locations = [
@@ -34,17 +33,21 @@ class PhysicsEngine:
         wpilib.SmartDashboard.putData("Field", self.field)
 
     def update_sim(self, now, timestep):
-        # Simulate simple linear and rotational motion
-        linear_speed = 2.0  # meters per second
-        angular_speed = math.radians(45)  # radians per second (45 degrees per second)
+        # Get the current module states from the swerve component
+        module_states = tuple(self.swerve.get_state().module_targets)
+        # (Requires packing because of pre-build pheonix6 stuff.. idk)
 
-        # Calculate the change in position and rotation
-        dx = linear_speed * timestep
-        dy = 0  # No sideways motion for simplicity
-        dtheta = angular_speed * timestep
+        # Use the kinematics model to calculate the robot's chassis speeds
+        chassis_speeds = self.swerve_kinematics.toChassisSpeeds(module_states)
 
-        # Use Twist2d for pose updates
-        twist = Twist2d(dx, dy, dtheta)
+        # Convert chassis speeds into a twist
+        twist = Twist2d(
+            chassis_speeds.vx * timestep,
+            chassis_speeds.vy * timestep,
+            chassis_speeds.omega * timestep,
+        )
+
+        # Update the robot pose
         self.robot_pose = self.robot_pose.exp(twist)
 
         # Update Field2d for visualization
