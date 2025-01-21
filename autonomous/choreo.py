@@ -1,9 +1,9 @@
 import wpilib
 from itertools import chain
+from typing import Callable
 from magicbot import AutonomousStateMachine, state, timed_state
 from component.swerve import Swerve
-
-# quick template for making autos
+import choreo
 
 
 class ChoreoAuto(AutonomousStateMachine):
@@ -13,19 +13,38 @@ class ChoreoAuto(AutonomousStateMachine):
     DISABLED = False
 
     swerve: Swerve
-    trajectory: ...  # TODO find correct type annotation
-    is_red: ...  # TODO find correct type annotation
+    trajectory: choreo.trajectory.SwerveTrajectory
+    is_red: Callable[[], bool]
 
     @state(first=True)
-    def packages(self, state_tm):
+    def correct(self):
+        initial = self.trajectory.get_initial_pose(False)
+        self.swerve.target(initial)
+        difference = self.swerve.get_state().pose.relativeTo(initial)
+        print("------------------------------")
+        print(initial)
+        print(self.swerve.get_state().pose)
+        print(difference)
+        if (
+            -0.01 < difference.x < 0.01
+            and -0.01 < difference.y < 0.01
+            and -2 < difference.rotation().degrees() < 2
+        ):
+            self.next_state_now("sample")
+
+    @state()
+    def sample(self, state_tm):
         if not self.trajectory:
             self.next_state_now("trajectory_missing")
+
+        if self.swerve.get_state().pose is not initial:
+            self.next_state_now()
 
         sample = self.trajectory.sample_at(state_tm, self.is_red())
         if sample:
             self.swerve.trajectory(sample)
         else:
-            print("no sample?")
+            print("no sample?", sample)
 
     @state()
     def trajectory_missing(self):
