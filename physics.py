@@ -1,5 +1,6 @@
 import math
 import wpilib
+import ntcore
 
 from wpilib import Field2d
 from pyfrc.physics.core import PhysicsInterface
@@ -50,5 +51,46 @@ class PhysicsEngine:
         # Update the robot pose
         self.robot_pose = self.robot_pose.exp(twist)
 
+        # Simulate Limelight outputs
+        self.virtual_limelight(self.robot_pose)
+
         # Update Field2d for visualization
         self.field.setRobotPose(self.robot_pose)
+
+    def virtual_limelight(self, pose: Pose2d):
+        """
+        Simulates many limelight functions (using nt)
+        Written by Joe
+        Feel free to add stuff!
+
+        :param pose: The robot's current pose (x, y, heading).
+        """
+
+        # Simulate Limelight data
+        visible_target = 1  # Target n always visible
+        target_offset_x = (
+            0  # Horizontal offset in degrees (e.g., perfectly centered target)
+        )
+        target_offset_y = 0  # Vertical offset in degrees
+        target_area = 30.0  # Arbitrary percentage of the image covered by the target
+
+        # Robot pose (pose.x, pose.y, pose.rotation().degrees())
+        robot_x = pose.X()
+        robot_y = pose.Y()
+        robot_heading = pose.rotation().degrees()
+
+        # Get or create the "limelight" NetworkTable
+        limelight_table = ntcore.NetworkTableInstance.getDefault().getTable("limelight")
+
+        # Publish Limelight data
+        limelight_table.putNumber("tv", visible_target)  # Target visible
+        limelight_table.putNumber("tx", target_offset_x)  # Horizontal offset
+        limelight_table.putNumber("ty", target_offset_y)  # Vertical offset
+        limelight_table.putNumber("ta", target_area)  # Target area
+
+        # Publish simulated pose
+        limelight_table.putNumber("botpose_x", robot_x)  # X position
+        limelight_table.putNumber("botpose_y", robot_y)  # Y position
+        limelight_table.putNumber(
+            "botpose_heading", robot_heading
+        )  # Heading in degrees
