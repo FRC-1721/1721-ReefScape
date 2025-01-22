@@ -21,6 +21,7 @@ class Robot(MagicRobot):
         self.nt = NetworkTableInstance.getDefault()
 
         # motors
+        # set Elevator motor two as follower for one
         self.elevatorMotor1 = phoenix6.hardware.talon_fx.TalonFX(
             ElevatorConstants.Motor1ID, ElevatorConstants.Motor1Canbus
         )
