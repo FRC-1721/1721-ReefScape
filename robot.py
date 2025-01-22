@@ -4,7 +4,7 @@ import wpilib, wpimath, wpimath.geometry
 import phoenix6
 from magicbot import MagicRobot
 
-from constant import TunerConstants, DriveConstants
+from constant import TunerConstants, DriveConstants, ElevatorConstants
 
 from component.swerve import Swerve
 
@@ -19,6 +19,14 @@ class Robot(MagicRobot):
         self.controller = wpilib.interfaces.GenericHID(0)
         self.gyro = phoenix6.hardware.Pigeon2(TunerConstants._pigeon_id)
         self.nt = NetworkTableInstance.getDefault()
+
+        # motors
+        self.elevatorMotor1 = phoenix6.hardware.talon_fx.TalonFX(
+            ElevatorConstants.Motor1ID, ElevatorConstants.Motor1Canbus
+        )
+        self.elevatorMotor2 = phoenix6.hardware.talon_fx.TalonFX(
+            ElevatorConstants.Motor2ID, ElevatorConstants.Motor2Canbus
+        )
 
     def teleopPeriodic(self):
         # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
