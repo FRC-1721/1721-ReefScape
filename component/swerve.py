@@ -4,7 +4,7 @@ import phoenix6
 
 from magicbot import feedback, will_reset_to
 
-from constant import TunerConstants, DriveConstants
+from constant import TunerConstants, DriveConstants, util
 
 
 class Swerve(phoenix6.swerve.SwerveDrivetrain):
@@ -16,12 +16,14 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
 
     # TODO Adjust PIDs?
     controller = wpimath.controller.HolonomicDriveController(
-        wpimath.controller.PIDController(1, 0, 0),
-        wpimath.controller.PIDController(1, 0, 0),
+        wpimath.controller.PIDController(5, 0, 0),
+        wpimath.controller.PIDController(5, 0, 0),
         wpimath.controller.ProfiledPIDControllerRadians(
-            1, 0, 0, wpimath.trajectory.TrapezoidProfileRadians.Constraints(6.28, 3.14)
+            5, 0, 0, wpimath.trajectory.TrapezoidProfileRadians.Constraints(6.28, 3.14)
         ),
     )
+
+    target_pose = wpimath.geometry.Pose2d(0, 0, 0)
 
     def __init__(self):
         phoenix6.swerve.SwerveDrivetrain.__init__(
@@ -66,13 +68,18 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
         velocity=0.5,
         facing=wpimath.geometry.Rotation2d(0),
     ):  # the formatter made this really tall
-        self.go(
-            *self.controller.calculate(self.get_state().pose, goal, velocity, facing)
+        self.target_pose = goal
+        pose = self.get_state().pose
+        limit = util.maxproportional(1)
+        x, y, z = self.controller.calculate(
+            self.get_state().pose, goal, velocity, facing
         )
+        self.go(*limit(x, y), *limit(z))
 
     # for choreo
     def trajectory(self, sample):
         pose = self.get_state().pose
+        self.target_pose = wpimath.geometry.Pose2d(sample.x, sample.y, sample.heading)
 
         self.go(
             sample.vx + self.controller.getXController().calculate(pose.X(), sample.x),
@@ -108,11 +115,19 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     @feedback
     def pose(self) -> list[float]:
         pose = self.get_state().pose
-        return [pose.x, pose.y]
+        return [pose.X(), pose.Y(), pose.rotation().degrees()]
 
     @feedback
     def heading(self) -> float:
         return self.gyro.getRotation2d().degrees()
+
+    @feedback
+    def goal(self) -> list[float]:
+        return [
+            self.target_pose.X(),
+            self.target_pose.Y(),
+            self.target_pose.rotation().degrees(),
+        ]
 
     # ran automatically (periodic)
     def execute(self):
