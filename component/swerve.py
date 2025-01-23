@@ -66,11 +66,12 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
         self,
         goal: wpimath.geometry.Pose2d,
         velocity=0.5,
+        velocity_limit=1,
         facing=wpimath.geometry.Rotation2d(0),
     ):  # the formatter made this really tall
         self.target_pose = goal
         pose = self.get_state().pose
-        limit = util.maxproportional(1)
+        limit = util.maxproportional(velocity_limit)
         x, y, z = self.controller.calculate(
             self.get_state().pose, goal, velocity, facing
         )
