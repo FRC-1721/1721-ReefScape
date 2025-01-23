@@ -169,3 +169,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Dev Ignore
+ctre_sim/
+networktables.json
+
+# Dev don't ignore! (Please dont bump)
+!simgui*.json
