@@ -24,9 +24,14 @@ class Robot(MagicRobot):
 
         # gyro
         self.gyro = phoenix6.hardware.Pigeon2(TunerConstants._pigeon_id)
-        
+
         # network tables
         self.nt = NetworkTableInstance.getDefault()
+
+        # encoders
+        self.elevatorEncoder = phoenix6.hardware.CANcoder(
+            ElevatorConstants.EncoderID, ElevatorConstants.EncoderCanbus
+        )
 
         # motors
         self.elevatorMotor1 = phoenix6.hardware.talon_fx.TalonFX(
@@ -36,9 +41,9 @@ class Robot(MagicRobot):
             ElevatorConstants.Motor2ID, ElevatorConstants.Motor2Canbus
         )
 
-        # encoders
-        self.elevatorEncoder = phoenix6.hardware.CANcoder(
-            ElevatorConstants.EncoderID, ElevatorConstants.EncoderCanbus
+        # followers
+        self.elevatorMotor2.set_control(
+            phoenix6.controls.follower.Follower(ElevatorConstants.Motor1ID, True)
         )
 
     def teleopPeriodic(self):
@@ -60,12 +65,12 @@ class Robot(MagicRobot):
             )
 
         # elevator movements
-        #presets
+        # presets
         if self.operatorController.getRawButton(8).toggleOnFalse():
             # TODO update preset points
             if self.operatorController.getRawButton(2):
                 elevator.set(20)
-            
+
             elif self.operatorController.getRawButton(3):
                 elevator.set(20)
 
