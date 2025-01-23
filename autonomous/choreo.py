@@ -18,6 +18,7 @@ class ChoreoAuto(AutonomousStateMachine):
 
     @state(first=True)
     def correct(self):
+        self.next_state_now("sample")
         initial = self.trajectory.get_initial_pose(False)
         self.swerve.target(initial)
         difference = self.swerve.get_state().pose.relativeTo(initial)
@@ -37,8 +38,8 @@ class ChoreoAuto(AutonomousStateMachine):
         if not self.trajectory:
             self.next_state_now("trajectory_missing")
 
-        if self.swerve.get_state().pose is not initial:
-            self.next_state_now()
+        # if self.swerve.get_state().pose is not initial:
+        #     self.next_state_now()
 
         sample = self.trajectory.sample_at(state_tm, self.is_red())
         if sample:
