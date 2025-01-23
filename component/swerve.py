@@ -16,10 +16,10 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
 
     # TODO Adjust PIDs?
     controller = wpimath.controller.HolonomicDriveController(
-        wpimath.controller.PIDController(5, 0, 0),
-        wpimath.controller.PIDController(5, 0, 0),
+        wpimath.controller.PIDController(5, 1, 0),
+        wpimath.controller.PIDController(5, 1, 0),
         wpimath.controller.ProfiledPIDControllerRadians(
-            5, 0, 0, wpimath.trajectory.TrapezoidProfileRadians.Constraints(6.28, 3.14)
+            5, 1, 0, wpimath.trajectory.TrapezoidProfileRadians.Constraints(6.28, 3.14)
         ),
     )
 

@@ -45,8 +45,8 @@ class Robot(MagicRobot):
         # There is supposed to be a function for this in limelightlib but
         # it only exists in the Java library, so we have to do this manually
         self.nt.getEntry("/limelight/robot_orientation_set").setDoubleArray(
-            [self.swerve.get_state().pose.rotation().degrees(), 0, 0, 0, 0, 0]
-            # [self.gyro.getRotation2d().degrees(), 0, 0, 0, 0, 0]
+            # [self.swerve.get_state().pose.rotation().degrees(), 0, 0, 0, 0, 0]
+            [self.gyro.getRotation2d().degrees(), 0, 0, 0, 0, 0]
         )
         self.nt.flush()  # Give limelight the pose immediately (don't wait)
 
@@ -63,7 +63,7 @@ class Robot(MagicRobot):
             self.swerve.add_vision_measurement(
                 wpimath.geometry.Pose2d(
                     wpimath.geometry.Translation2d(pose[0], pose[1]),
-                    wpimath.geometry.Rotation2d.fromDegrees(pose[5]),
+                    wpimath.geometry.Rotation2d.fromDegrees(pose[6]),
                 ),
                 phoenix6.utils.get_current_time_seconds(),
             )
