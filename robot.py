@@ -7,6 +7,7 @@ from magicbot import MagicRobot
 from constant import TunerConstants, DriveConstants, ElevatorConstants
 
 from component.swerve import Swerve
+from component.elevator import Elevator
 
 from ntcore import NetworkTableInstance
 
@@ -14,10 +15,17 @@ from ntcore import NetworkTableInstance
 class Robot(MagicRobot):
 
     swerve: Swerve
+    elevator: Elevator
 
     def createObjects(self):
-        self.controller = wpilib.interfaces.GenericHID(0)
+        # make controllers
+        self.driveController = wpilib.interfaces.GenericHID(0)
+        self.operatorController = wpilib.interfaces.GenericHID(1)
+
+        # gyro
         self.gyro = phoenix6.hardware.Pigeon2(TunerConstants._pigeon_id)
+        
+        # network tables
         self.nt = NetworkTableInstance.getDefault()
 
         # motors
@@ -36,7 +44,7 @@ class Robot(MagicRobot):
     def teleopPeriodic(self):
         # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
 
-        if self.controller.getRawButton(2):
+        if self.driveController.getRawButton(2):
             self.swerve.target(
                 wpimath.geometry.Pose2d(
                     0, 0, wpimath.geometry.Rotation2d.fromDegrees(0)
@@ -45,11 +53,28 @@ class Robot(MagicRobot):
 
         else:
             self.swerve.go(
-                self.controller.getRawAxis(1),
-                self.controller.getRawAxis(0),
-                -self.controller.getRawAxis(2),
-                self.controller.getRawAxis(3) <= 0,  # field centric toggle
+                self.driveController.getRawAxis(1),
+                self.driveController.getRawAxis(0),
+                -self.driveController.getRawAxis(2),
+                self.driveController.getRawAxis(3) <= 0,  # field centric toggle
             )
+
+        # elevator movements
+        #presets
+        if self.operatorController.getRawButton(8).toggleOnFalse():
+            # TODO update preset points
+            if self.operatorController.getRawButton(2):
+                elevator.set(20)
+            
+            elif self.operatorController.getRawButton(3):
+                elevator.set(20)
+
+            elif self.operatorController.getRawButton(4):
+                elevator.set(20)
+
+        # manual
+        else:
+            elevator.set(self.operatorController.getRawAxis(0))
 
         # update robot pose based on AprilTags
         # if tid != -1:
@@ -63,8 +88,8 @@ class Robot(MagicRobot):
         #         phoenix6.utils.get_current_time_seconds(),
         #     )
 
-        if self.controller.getRawButton(5):
+        if self.driveController.getRawButton(5):
             self.swerve.tare_everything()
 
-        if self.controller.getRawButton(1):
+        if self.driveController.getRawButton(1):
             self.swerve.brake()
