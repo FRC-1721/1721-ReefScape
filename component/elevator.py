@@ -5,7 +5,7 @@ from magicbot import feedback, will_reset_to
 
 
 class Elevator:
-    elevatorMotor1: phoenix6.hardware.talon_fx
+    elevatorMotor1: phoenix6.hardware.talon_fx.TalonFX
     elevatorEncoder: phoenix6.hardware.CANcoder
 
     x = will_reset_to(0)
