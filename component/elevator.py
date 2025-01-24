@@ -17,6 +17,6 @@ class Elevator:
         self.x = goal
 
     def execute(self):
-        elevatorMotor1.set(
-            self.controller.calculate(elevatorEncoder.get_position(), self.x)
+        self.elevatorMotor1.set(
+            self.controller.calculate(self.elevatorEncoder.get_position().value, self.x)
         )
