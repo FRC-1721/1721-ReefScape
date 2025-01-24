@@ -46,6 +46,9 @@ class Robot(MagicRobot):
             phoenix6.controls.follower.Follower(ElevatorConstants.Motor1ID, True)
         )
 
+        # misc
+        self.elevatorManualToggle = False
+
     def teleopPeriodic(self):
         # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
 
@@ -66,7 +69,10 @@ class Robot(MagicRobot):
 
         # elevator movements
         # presets
-        if self.operatorController.getRawButton(8).toggleOnFalse():
+        if self.operatorController.getRawButton(8):
+            self.elevatorManualToggle = not self.elevatorManualToggle
+
+        if self.elevatorManualToggle == False:
             # TODO update preset points
             if self.operatorController.getRawButton(2):
                 elevator.set(20)
