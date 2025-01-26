@@ -1,75 +1,116 @@
 #!/usr/bin/env python3
 
-# Libs
 import logging
-import wpilib, wpimath, wpimath.geometry
-import phoenix6
 from magicbot import MagicRobot
-from ntcore import NetworkTableInstance
-
-# Constants
-from constant import TunerConstants, DriveConstants
-
-# Components
-from component.swerve import Swerve
-
-# Sim
-from physics import PhysicsEngine
-
 
 class Robot(MagicRobot):
+    """ The main class used by robotpy. This class is mandatory.
+    
+    The robot will run periodic tasks based on what state the robot is currently in.
+    
+    Robot States:
+        Disabled:     The robot is currently disabled.
+            - See disabledInit() and disabledPeriodic()
+        Autonomous:   The robot is coded to act on its own
+            - See disabledInit() and disabledPeriodic()
+        Teleop:       Remote controlled, usually by a human with a joystick.
+            - See teleopInit() and teleopPeriodic()
+        Test:         Testing mode
+            - See teleopInit() and teleopPeriodic()
 
-    swerve: Swerve
+    Args:
+        MagicRobot (Class): The base class, which itself inherits from wpilib.RobotBase.
+    """
 
+    # This is just a general purpose counter. I am using it in this example code to allow me
+    # to slowly print periodic status updates
+    indexCount = 0
+        
     def robotInit(self):
+        """
+        This method is called as soon as the robot is turned on.
+        """
         super().robotInit()
-
-        # Configure logging
-        logging.basicConfig(
-            level=logging.INFO if wpilib.RobotBase.isSimulation() else logging.DEBUG,
-            format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S",
-        )
-        self.logger = logging.getLogger("Robot")
-        self.logger.info("Robot is initializing...")
+    
+        self.logger = logging.getLogger("Brian")
+        self.logger.info("Brian's robot is initializing")
 
     def createObjects(self):
-        self.controller = wpilib.interfaces.GenericHID(0)
-        self.gyro = phoenix6.hardware.Pigeon2(TunerConstants._pigeon_id)
-        self.nt = NetworkTableInstance.getDefault()
+        """
+        TBD: This method will be utilized in future commits
+        """
+        ...
 
+    def disabledInit(self):
+        """
+        Called when disabled state starts
+        """
+        print("\ndisabledInit")
+        self.indexCount = 0
+
+    def disabledPeriodic(self):
+        """
+        The periodic code that is run in the disable state.
+        
+        The Amount of time each loop takes is set in the MagicRobot base class.
+        It defaults to 20ms and is set with 'control_loop_wait_time = 0.020'
+        """
+        if self.indexCount % 250 == 0:
+            print(".", end = " ")
+        self.indexCount += 1
+        
+    def autonomousInit(self):
+        """
+        Called when autonomous state starts for any of the autonomous modes.
+        
+        The autonomous state does not use an autonomousPeriodic. Instead, it uses
+        the AutonomousModeSelector (which will be utilized in a future commit)
+        """
+        print("\nautonomousInit")
+        self.indexCount = 0
+        
+    def teleopInit(self):
+        """
+        Called when teleop state starts
+        """
+        print("\nteleopInit")
+        self.indexCount = 0
+        
     def teleopPeriodic(self):
-        # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
+        """
+        The periodic code that is run in the teleop state.
+        
+        The Amount of time each loop takes is set in the MagicRobot base class.
+        It defaults to 20ms and is set with 'control_loop_wait_time = 0.020'
+        """
+        if self.indexCount % 250 == 0:
+            print(".", end = " ")
+        self.indexCount += 1
 
-        if self.controller.getRawButton(2):
-            self.swerve.target(
-                wpimath.geometry.Pose2d(
-                    0, 0, wpimath.geometry.Rotation2d.fromDegrees(0)
-                )
-            )
-
-        else:
-            self.swerve.go(
-                self.controller.getRawAxis(1),
-                self.controller.getRawAxis(0),
-                -self.controller.getRawAxis(2),
-                self.controller.getRawAxis(3) <= 0,  # field centric toggle
-            )
-
-        # update robot pose based on AprilTags
-        # if tid != -1:
-        #     pose = self.nt.getEntry("/limelight/botpose_targetspace").getDoubleArray(
-        #         [0, 0, 0, 0, 0, 0]
-        #     )
-        #     self.swerve.add_vision_measurement(
-        #         wpimath.geometry.Pose2d(
-        #             TODO
-        #         ),
-        #         phoenix6.utils.get_current_time_seconds(),
-        #     )
-
-        if self.controller.getRawButton(5):
-            self.swerve.tare_everything()
-
-        if self.controller.getRawButton(1):
-            self.swerve.brake()
+    def testInit(self):
+        """
+        Called when test state starts
+        """
+        print("\ntestInit")
+        self.indexCount = 0
+        
+    def testPeriodic(self):
+        """
+        The periodic code that is run in the test state.
+        
+        The Amount of time each loop takes is set in the MagicRobot base class.
+        It defaults to 20ms and is set with 'control_loop_wait_time = 0.020'
+        """
+        if self.indexCount % 250 == 0:
+            print(".", end = " ")
+        self.indexCount += 1
+    
+    def robotPeriodic(self):
+        """
+        Called last after every state. Can be useful to always update things such as
+        network tables.
+        
+        Add code here if you need something to always happen. Look at the base class to
+        see what it updates.
+        """
+        super().robotPeriodic()

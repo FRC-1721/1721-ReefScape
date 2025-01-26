@@ -28,6 +28,13 @@
       }
     }
   },
+  "NetworkTables": {
+    "transitory": {
+      "limelight": {
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
     "visible": true
   },
