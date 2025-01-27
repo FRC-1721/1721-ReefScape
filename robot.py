@@ -2,6 +2,7 @@
 
 import wpilib, wpimath, wpimath.geometry
 import phoenix6
+from rev import SparkMax, SparkLowLevel, SparkAbsoluteEncoder
 from magicbot import MagicRobot
 
 from constant import TunerConstants, DriveConstants, ElevatorConstants
@@ -29,9 +30,10 @@ class Robot(MagicRobot):
         self.nt = NetworkTableInstance.getDefault()
 
         # encoders
-        self.elevatorEncoder = phoenix6.hardware.CANcoder(
-            ElevatorConstants.EncoderID, ElevatorConstants.EncoderCanbus
+        self.elevatorAbsolute = SparkMax(
+            ElevatorConstants.EncoderID, SparkLowLevel.MotorType.kBrushless
         )
+        self.elevatorEncoder = self.elevatorAbsolute.getAbsoluteEncoder()
 
         # motors
         self.elevatorMotor1 = phoenix6.hardware.talon_fx.TalonFX(
