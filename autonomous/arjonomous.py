@@ -26,18 +26,10 @@ class ArjAuto(AutonomousStateMachine):
     def armove(self, tm, initial_call):
         if initial_call:
             # This is the first time this function runs
-            self.startx = self.swerve.pose()[0] if wpilib.RobotBase.isReal() else 1.721
+            self.startx = self.swerve.pose()[0]
             logging.debug(f"ArjAuto set startx to {self.startx}")
 
-        distance_driven = (
-            self.swerve.pose()[0] - self.startx  # Real Robot
-            if wpilib.RobotBase.isReal()
-            else ntcore.NetworkTableInstance.getDefault()  # Robot is existential
-            .getTable("SmartDashboard")
-            .getEntry("Field/Robot")
-            .getDoubleArray(0.0)[0]  # X pose in robotpose
-        )
-        logging.info(f"Distance driven {distance_driven}")
+        distance_driven = self.swerve.pose()[0] - self.startx
 
         if distance_driven < 1.0:
             self.swerve.go(0.1, 0, 0, False)

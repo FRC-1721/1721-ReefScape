@@ -1,8 +1,10 @@
+import logging
 import wpilib
 import wpimath, wpimath.controller, wpimath.trajectory
 import phoenix6
 
 from magicbot import feedback, will_reset_to
+from wpimath.geometry import Pose2d
 
 from constant import TunerConstants, DriveConstants
 
@@ -38,8 +40,9 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
             ],
         )
 
-        if phoenix6.utils.is_simulation():
-            ...
+        if phoenix6.utils.is_simulation() or not wpilib.RobotBase.isReal():
+            logging.warning("Swerve is running in sim mode!")
+            self.sim_pose = Pose2d(0, 0, 0)
 
     def go(self, x, y, z, field_centric=False):  # convenience
         self.request = (
@@ -93,7 +96,12 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
 
     @feedback
     def pose(self) -> list[float]:
-        pose = self.get_state().pose
+        if wpilib.RobotBase.isReal():
+            pose = self.get_state().pose
+        else:
+            # Everything is a simulation!
+            pose = self.sim_pose
+
         return [pose.x, pose.y]
 
     @feedback

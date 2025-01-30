@@ -6,13 +6,15 @@ from wpilib import Field2d
 from pyfrc.physics.core import PhysicsInterface
 from wpimath.geometry import Pose2d, Rotation2d, Twist2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
+
+from component.swerve import Swerve
 from constant import TunerConstants
 
 
 class PhysicsEngine:
     def __init__(self, physics_controller: PhysicsInterface, robot: "UnnamedToaster"):
         self.physics_controller = physics_controller
-        self.swerve = robot.swerve  # component/swerve.py
+        self.swerve: Swerve = robot.swerve  # component/swerve.py
 
         # Define the swerve module locations from constants
         self.module_locations = [
@@ -50,6 +52,12 @@ class PhysicsEngine:
 
         # Update the robot pose
         self.robot_pose = self.robot_pose.exp(twist)
+
+        # Update internal pose in swerve sim
+        self.swerve.sim_pose = self.robot_pose  # We just manually set the pose (messy)
+        self.swerve.gyro.sim_state.set_raw_yaw(
+            self.robot_pose.rotation().degrees()
+        )  # Proper way to invoke setting the sim state
 
         # Simulate Limelight outputs
         self.virtual_limelight(self.robot_pose)
