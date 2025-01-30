@@ -26,11 +26,25 @@ def test_go(swerve):
     assert isinstance(request, FieldCentric)
 
 
-def test_pose_feedback(swerve):
+def test_real_pose_feedback(swerve):
     """
     Test the pose feedback function.
+
+    Test written by Joe
     """
 
     pose = Pose2d(2.0, 3.0, Rotation2d.fromDegrees(45))
     swerve.get_state = lambda: type("State", (), {"pose": pose})()  # Mock get_state
-    assert swerve.pose() == [2.0, 3.0]
+    assert swerve.pose() == [pose.x, pose.y]
+
+
+def test_sim_pose_feedback(swerve):
+    """
+    Test the simulated pose feedback function.
+
+    Test written by Joe
+    """
+
+    pose = Pose2d(2.0, 3.0, Rotation2d.fromDegrees(45))
+    swerve.sim_pose = pose
+    assert swerve.pose() == [pose.x, pose.y]
