@@ -1,6 +1,8 @@
 [![Robot Workflow](https://github.com/FRC-1721/1721-ReefScape/actions/workflows/robot-workflow.yml/badge.svg)](https://github.com/FRC-1721/1721-ReefScape/actions/workflows/robot-workflow.yml)
-
 # 1721-ReefScape
+
+![beyblade](https://github.com/user-attachments/assets/2c38aa06-f3b5-47c6-af1f-6b957e582218)
+
 
 # Development
 
