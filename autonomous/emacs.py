@@ -9,7 +9,7 @@ from component.swerve import Swerve
 class EmacsAuto(AutonomousStateMachine):
 
     MODE_NAME = "Emacs"
-    DEFAULT = True
+    DEFAULT = False
     DISABLED = False
 
     swerve: Swerve
