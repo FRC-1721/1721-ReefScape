@@ -6,3 +6,9 @@ EncoderID = 16
 Motor1Canbus = "rio"
 Motor2Canbus = "rio"
 EncoderCanbus = "rio"
+
+
+P = 0.025
+I = 0.00001
+D = 3.7
+F = 0.0
