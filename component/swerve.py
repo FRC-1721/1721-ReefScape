@@ -93,6 +93,9 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     def set(self, request: phoenix6.swerve.requests.SwerveRequest):
         self.request = request
 
+    def zeroGyro(self):
+        self.gyro.reset()
+
     # these values are pushed to NetworkTables
     @feedback
     def speed(self) -> list[float]:
