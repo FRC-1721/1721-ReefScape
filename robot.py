@@ -9,7 +9,8 @@ from magicbot import MagicRobot
 from ntcore import NetworkTableInstance
 
 from constant import TunerConstants, DriveConstants
-from constant.ElevatorConstants import ElevatorConstants as EelevConst
+from constant.ElevatorConstants import Constants as EelevConst
+from constant.ElevatorConstants import Setpoints as ElevSetpoint
 
 # Components
 from component.swerve import Swerve
@@ -83,13 +84,13 @@ class Robot(MagicRobot):
         if not self.elevator.is_manual_mode == False:
             # TODO update preset points
             if self.operatorController.getRawButton(2):
-                elevator.set(20)
+                elevator.set(ElevSetpoint.MIN_HEIGHT)
 
             elif self.operatorController.getRawButton(3):
-                elevator.set(20)
+                elevator.set(ElevSetpoint.MIN_HEIGHT * 2)
 
             elif self.operatorController.getRawButton(4):
-                elevator.set(20)
+                elevator.set(ElevSetpoint.LAURA)
         else:
             # Manual mode
             elevator.set(self.operatorController.getRawAxis(0))

@@ -1,4 +1,4 @@
-class ElevatorConstants:
+class Constants:
     # Motor IDs
     Motor1ID = 14
     Motor2ID = 15
@@ -22,3 +22,8 @@ class ElevatorConstants:
         kS = 0.2  # Static friction feedforward
         kV = 0.1  # Velocity feedforward
         kA = 0.01  # Acceleration feedforward
+
+
+class Setpoints:
+    MIN_HEIGHT = 0.0  # Minimum Height
+    LAURA = 100.0  # Maximum Height

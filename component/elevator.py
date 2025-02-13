@@ -5,7 +5,7 @@ import phoenix6
 from wpimath.controller import PIDController
 from wpimath.controller import SimpleMotorFeedforwardMeters
 from magicbot import feedback, will_reset_to
-from constant.ElevatorConstants import ElevatorConstants
+from constant.ElevatorConstants import Constants
 from utils import value_changed
 
 
@@ -23,16 +23,16 @@ class Elevator:
     def __init__(self):
         # Initialize PID controller
         self.controller = PIDController(
-            ElevatorConstants.LiftPID.P,
-            ElevatorConstants.LiftPID.I,
-            ElevatorConstants.LiftPID.D,
+            Constants.LiftPID.P,
+            Constants.LiftPID.I,
+            Constants.LiftPID.D,
         )
 
         # Feedforward (optional but useful for motion control)
         self.feedforward = SimpleMotorFeedforwardMeters(
-            ElevatorConstants.LiftFF.kS,
-            ElevatorConstants.LiftFF.kV,
-            ElevatorConstants.LiftFF.kA,
+            Constants.LiftFF.kS,
+            Constants.LiftFF.kV,
+            Constants.LiftFF.kA,
         )
 
         # Flags
@@ -45,7 +45,7 @@ class Elevator:
 
         # Set motor2 to follow motor1
         self.elevatorMotor2.set_control(
-            phoenix6.controls.follower.Follower(ElevatorConstants.Motor1ID, True)
+            phoenix6.controls.follower.Follower(Constants.Motor1ID, True)
         )
 
         # Reset encoders
