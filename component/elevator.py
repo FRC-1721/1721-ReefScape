@@ -3,7 +3,7 @@ import wpimath
 from rev import SparkAbsoluteEncoder
 from wpilib import MotorControllerGroup
 from magicbot import feedback, will_reset_to
-from constants.ElevatorConstants import P, I, D, F
+from constant.ElevatorConstants import P, I, D, F
 
 
 class Elevator:
