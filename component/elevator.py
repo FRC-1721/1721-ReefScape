@@ -69,7 +69,7 @@ class Elevator:
         Run control loop for the elevator.
         """
 
-        # Using the internal encoder TODO: change!
+        # TODO Use something other than the motor itself as the encoder
         current_position = self.elevatorMotor1.get_position().value
 
         pid_output = self.controller.calculate(current_position, self.x)

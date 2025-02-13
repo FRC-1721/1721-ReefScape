@@ -4,7 +4,8 @@ class ElevatorConstants:
     Motor2ID = 15
     EncoderID = 16
 
-    # CAN Bus (TODO: Change to "can of war" lol)
+    # CAN Bus
+    # TODO: Change to "can of war" lol
     Motor1Canbus = "rio"
     Motor2Canbus = "rio"
     EncoderCanbus = "rio"
