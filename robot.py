@@ -8,7 +8,8 @@ from rev import SparkMax, SparkLowLevel, SparkAbsoluteEncoder
 from magicbot import MagicRobot
 from ntcore import NetworkTableInstance
 
-from constant import TunerConstants, DriveConstants, ElevatorConstants
+from constant import TunerConstants, DriveConstants
+from constant.ElevatorConstants import ElevatorConstants as EelevConst
 
 # Components
 from component.swerve import Swerve
@@ -36,36 +37,25 @@ class Robot(MagicRobot):
         self.logger.info("Robot is initializing...")
 
     def createObjects(self):
-        # make controllers
+        # Controllers
         self.driveController = wpilib.interfaces.GenericHID(0)
         self.operatorController = wpilib.interfaces.GenericHID(1)
 
-        # gyro
+        # Gyro
         self.gyro = phoenix6.hardware.Pigeon2(TunerConstants._pigeon_id)
 
-        # network tables
+        # NetworkTables
         self.nt = NetworkTableInstance.getDefault()
 
-        # encoders
-        self.elevatorAbsolute = SparkMax(
-            ElevatorConstants.EncoderID, SparkLowLevel.MotorType.kBrushless
-        )
-        self.elevatorEncoder = self.elevatorAbsolute.getAbsoluteEncoder()
-
-        # motors
+        # Motors - (Elevator Injection)
         self.elevatorMotor1 = phoenix6.hardware.talon_fx.TalonFX(
-            ElevatorConstants.Motor1ID, ElevatorConstants.Motor1Canbus
+            EelevConst.Motor1ID, EelevConst.Motor1Canbus
         )
         self.elevatorMotor2 = phoenix6.hardware.talon_fx.TalonFX(
-            ElevatorConstants.Motor2ID, ElevatorConstants.Motor2Canbus
+            EelevConst.Motor2ID, EelevConst.Motor2Canbus
         )
 
-        # followers
-        self.elevatorMotor2.set_control(
-            phoenix6.controls.follower.Follower(ElevatorConstants.Motor1ID, True)
-        )
-
-        # misc
+        # Flags/Overrides
         self.elevatorManualToggle = False
 
     def teleopPeriodic(self):
