@@ -29,16 +29,6 @@
       }
     }
   },
-  "NetworkTables": {
-    "transitory": {
-      "components": {
-        "elevator": {
-          "open": true
-        },
-        "open": true
-      }
-    }
-  },
   "NetworkTables Info": {
     "visible": true
   },
