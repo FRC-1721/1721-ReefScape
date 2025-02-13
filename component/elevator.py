@@ -1,9 +1,12 @@
-import phoenix6
 import wpimath
+import logging
+import phoenix6
+
 from wpimath.controller import PIDController
 from wpimath.controller import SimpleMotorFeedforwardMeters
 from magicbot import feedback, will_reset_to
 from constant.ElevatorConstants import ElevatorConstants
+from utils import value_changed
 
 
 class Elevator:
@@ -32,6 +35,9 @@ class Elevator:
             ElevatorConstants.LiftFF.kA,
         )
 
+        # Flags
+        self._manual_mode = False  # Internal flag (default: False)
+
     def setup(self):
         """
         This function is automatically called by MagicBot after injection.
@@ -49,6 +55,15 @@ class Elevator:
         """Set the target position for the elevator."""
         self.x = goal
 
+    def set_manual_mode(self, enabled: bool):
+        """
+        Enables or disables manual mode.
+        :param enabled: True to enable manual mode, False to disable.
+        """
+        if value_changed("elevator_manual_mode", enabled):
+            logging.info(f"Elevator manual mode {'ENABLED' if enabled else 'DISABLED'}")
+        self._manual_mode = enabled
+
     def execute(self):
         """
         Run control loop for the elevator.
@@ -62,8 +77,16 @@ class Elevator:
 
         output = pid_output + ff_output
 
-        # Apply output to the motor
-        self.elevatorMotor1.set(output)
+        if not self._manual_mode:
+            # Apply PID + FF control
+            self.elevatorMotor1.set(output)
+        else:
+            # Manually override to direct control
+            self.elevatorMotor1.set(self.x)
+
+    def is_manual_mode(self) -> bool:
+        """Returns whether manual mode is currently enabled."""
+        return self._manual_mode
 
     @feedback
     def get_position(self) -> float:
