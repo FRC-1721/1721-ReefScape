@@ -1,14 +1,23 @@
-Motor1ID = 14
-Motor2ID = 15
-EncoderID = 16
+class ElevatorConstants:
+    # Motor IDs
+    Motor1ID = 14
+    Motor2ID = 15
+    EncoderID = 16
 
-# TODO change to can of war
-Motor1Canbus = "rio"
-Motor2Canbus = "rio"
-EncoderCanbus = "rio"
+    # CAN Bus (TODO: Change to "can of war" lol)
+    Motor1Canbus = "rio"
+    Motor2Canbus = "rio"
+    EncoderCanbus = "rio"
 
+    # PID Constants
+    class LiftPID:
+        P = 0.025
+        I = 0.00001
+        D = 3.7
+        F = 0.0
 
-P = 0.025
-I = 0.00001
-D = 3.7
-F = 0.0
+    # Feedforward Constants
+    class LiftFF:
+        kS = 0.2  # Static friction feedforward
+        kV = 0.1  # Velocity feedforward
+        kA = 0.01  # Acceleration feedforward
