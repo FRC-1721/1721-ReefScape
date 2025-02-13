@@ -1,22 +1,39 @@
 #!/usr/bin/env python3
 
+# Libs
+import logging
 import wpilib, wpimath, wpimath.geometry
 import phoenix6
 from rev import SparkMax, SparkLowLevel, SparkAbsoluteEncoder
 from magicbot import MagicRobot
+from ntcore import NetworkTableInstance
 
 from constant import TunerConstants, DriveConstants, ElevatorConstants
 
+# Components
 from component.swerve import Swerve
 from component.elevator import Elevator
 
-from ntcore import NetworkTableInstance
+# Sim
+from physics import PhysicsEngine
 
 
 class Robot(MagicRobot):
 
     swerve: Swerve
     elevator: Elevator
+
+    def robotInit(self):
+        super().robotInit()
+
+        # Configure logging
+        logging.basicConfig(
+            level=logging.INFO if wpilib.RobotBase.isSimulation() else logging.DEBUG,
+            format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+        self.logger = logging.getLogger("Robot")
+        self.logger.info("Robot is initializing...")
 
     def createObjects(self):
         # make controllers

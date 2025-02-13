@@ -3,6 +3,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+url = "https://packages.frc1721.org"
+verify_ssl = true
+name = "frc1721"
+
 [packages]
 wpilib = "2025.2.1"
 robotpy = "2025.2.1.0"

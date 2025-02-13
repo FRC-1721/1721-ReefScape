@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0f0e67a900f41bf21cc4683c64ab4c79604bb3795e62b80dfdde01b1ccd246c6"
+            "sha256": "cf4a3c06de1c9df732f33b056e6bf0c560299ee62012d0ac6e0b80803b9115be"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -11,6 +11,11 @@
             {
                 "name": "pypi",
                 "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            },
+            {
+                "name": "frc1721",
+                "url": "https://packages.frc1721.org",
                 "verify_ssl": true
             }
         ]
