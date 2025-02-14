@@ -12,7 +12,7 @@ name = "frc1721"
 wpilib = "2025.2.1"
 robotpy = "2025.2.1.0"
 phoenix6 = "25.2.1"
-robotpy-rev = "2025.0.2"
+# robotpy-rev = "2025.0.2"
 
 [dev-packages]
 

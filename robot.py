@@ -4,7 +4,8 @@
 import logging
 import wpilib, wpimath, wpimath.geometry
 import phoenix6
-from rev import SparkMax, SparkLowLevel, SparkAbsoluteEncoder
+
+# from rev import SparkMax, SparkLowLevel, SparkAbsoluteEncoder
 from magicbot import MagicRobot
 from ntcore import NetworkTableInstance
 
@@ -17,7 +18,7 @@ from component.swerve import Swerve
 from component.elevator import Elevator
 
 # Sim
-from physics import PhysicsEngine
+# from physics import PhysicsEngine
 
 
 class Robot(MagicRobot):
@@ -49,12 +50,18 @@ class Robot(MagicRobot):
         self.nt = NetworkTableInstance.getDefault()
 
         # Motors - (Elevator Injection)
-        self.elevatorMotor1 = phoenix6.hardware.talon_fx.TalonFX(
+        self.elevatorMotor = phoenix6.hardware.talon_fx.TalonFX(
             EelevConst.Motor1ID, EelevConst.Motor1Canbus
         )
         self.elevatorMotor2 = phoenix6.hardware.talon_fx.TalonFX(
             EelevConst.Motor2ID, EelevConst.Motor2Canbus
         )
+        # Set motor2 to follow motor1
+        self.elevatorMotor2.set_control(
+            phoenix6.controls.follower.Follower(EelevConst.Motor1ID, False)
+        )
+        self.elevatorMotor.set_position(0)  # Reset Falcon's built-in encoder
+        self.elevatorMotor.configurator.apply(EelevConst.config)
 
     def teleopPeriodic(self):
         # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
@@ -76,24 +83,40 @@ class Robot(MagicRobot):
 
         # elevator movements
         # presets
+        # if True:
         if self.operatorController.getRawButton(8):
             self.elevator.set_manual_mode(True)
         else:
             self.elevator.set_manual_mode(False)
 
-        if not self.elevator.is_manual_mode == False:
+        if not self.elevator.is_manual_mode():
             # TODO update preset points
             if self.operatorController.getRawButton(2):
-                elevator.set(ElevSetpoint.MIN_HEIGHT)
+                self.elevator.set(ElevSetpoint.MIN_HEIGHT)
 
             elif self.operatorController.getRawButton(3):
-                elevator.set(ElevSetpoint.MIN_HEIGHT * 2)
+                self.elevator.set(ElevSetpoint.LOW)
 
             elif self.operatorController.getRawButton(4):
-                elevator.set(ElevSetpoint.LAURA)
+                self.elevator.set(ElevSetpoint.HIGH)
         else:
             # Manual mode
-            elevator.set(self.operatorController.getRawAxis(0))
+            if self.operatorController.getRawButton(7):
+                if self.operatorController.getRawButton(4):
+                    print("UP")
+                    self.elevator.set(EelevConst.up)
+
+                elif self.operatorController.getRawButton(1):
+                    print("DOWN")
+                    self.elevator.set(EelevConst.down)
+
+                else:
+                    if self.elevator.get_position() > 0.1:
+                        self.elevator.set(EelevConst.stay)
+            else:
+                self.elevator.set(
+                    self.operatorController.getRawAxis(0) * EelevConst.dampen
+                )
 
         # update robot pose based on AprilTags
         # if tid != -1:
