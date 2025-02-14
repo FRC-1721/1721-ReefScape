@@ -73,3 +73,6 @@ class Robot(MagicRobot):
 
         if self.controller.getRawButton(1):
             self.swerve.brake()
+
+        if self.controller.getRawButton(9):
+            self.swerve.zeroGyro()
