@@ -3,7 +3,12 @@ import wpilib
 import ntcore
 
 from wpilib import Field2d
-from pyfrc.physics.core import PhysicsInterface
+
+# Don't bother if we're not in sim
+if wpilib.RobotBase.isSimulation():
+    from pyfrc.physics.core import PhysicsInterface
+else:
+    PhysicsInterface = None
 from wpimath.geometry import Pose2d, Rotation2d, Twist2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
 

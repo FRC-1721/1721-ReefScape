@@ -16,9 +16,6 @@ from constant.ElevatorConstants import Setpoints as ElevSetpoint
 from component.swerve import Swerve
 from component.elevator import Elevator
 
-# Sim
-from physics import PhysicsEngine
-
 
 class Robot(MagicRobot):
 
