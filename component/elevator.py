@@ -5,7 +5,7 @@ import phoenix6
 from wpimath.controller import PIDController
 from wpimath.controller import ElevatorFeedforward
 from magicbot import feedback, will_reset_to
-from constant.ElevatorConstants import Constants, Setpoints
+import constant.ElevatorConstants as Const
 import util
 
 
@@ -15,38 +15,17 @@ class Elevator:
     """
 
     # Hardware
-    elevatorMotor: phoenix6.hardware.talon_fx.TalonFX
-    elevatorMotor2: phoenix6.hardware.talon_fx.TalonFX
+    elevatorMotor: Const.MotorClass
+    elevatorMotor2: Const.MotorClass
 
-    x = will_reset_to(Setpoints.HOME)
+    x = will_reset_to(Const.Setpoint.HOME)
+
+    controller = Const.Controller
+    feedforward = Const.FFController
 
     def __init__(self):
-        # Initialize PID controller
-        self.controller = PIDController(
-            Constants.LiftPID.P,
-            Constants.LiftPID.I,
-            Constants.LiftPID.D,
-        )
-
-        # self.feedforward = SimpleMotorFeedforwardMeters(
-        #     Constants.LiftFF.kS,
-        #     Constants.LiftFF.kV,
-        #     Constants.LiftFF.kA,
-        # )
-
-        # Feedforward (optional but useful for motion control)
-        self.feedforward = ElevatorFeedforward(
-            Constants.LiftFF.kS,
-            Constants.LiftFF.kG,
-            Constants.LiftFF.kV,
-            Constants.LiftFF.kA,
-        )
-
         # Flags
         self._manual_mode = False  # Internal flag (default: False)
-
-        # Clamp
-        self.clamp = util.clamp(Constants.down, Constants.up)
 
     def setup(self):
         """
@@ -86,8 +65,8 @@ class Elevator:
 
         if not self._manual_mode:
             # Apply PID + FF control
-            print(f"{output} --> {self.clamp(output)}")
-            self.elevatorMotor.set(self.clamp(output))
+            print(f"{output} --> {Const.clamp(output)}")
+            self.elevatorMotor.set(Const.clamp(output))
         else:
             # Manually override to direct control
             self.elevatorMotor.set(self.x)

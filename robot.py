@@ -10,8 +10,7 @@ from magicbot import MagicRobot
 from ntcore import NetworkTableInstance
 
 from constant import TunerConstants, DriveConstants
-from constant.ElevatorConstants import Constants as EelevConst
-from constant.ElevatorConstants import Setpoints as ElevSetpoint
+import constant.ElevatorConstants as EelevConst
 
 # Components
 from component.swerve import Swerve
@@ -50,10 +49,10 @@ class Robot(MagicRobot):
         self.nt = NetworkTableInstance.getDefault()
 
         # Motors - (Elevator Injection)
-        self.elevatorMotor = phoenix6.hardware.talon_fx.TalonFX(
+        self.elevatorMotor = EelevConst.MotorClass(
             EelevConst.Motor1ID, EelevConst.Motor1Canbus
         )
-        self.elevatorMotor2 = phoenix6.hardware.talon_fx.TalonFX(
+        self.elevatorMotor2 = EelevConst.MotorClass(
             EelevConst.Motor2ID, EelevConst.Motor2Canbus
         )
         # Set motor2 to follow motor1
@@ -92,13 +91,13 @@ class Robot(MagicRobot):
         if not self.elevator.is_manual_mode():
             # TODO update preset points
             if self.operatorController.getRawButton(2):
-                self.elevator.set(ElevSetpoint.MIN_HEIGHT)
+                self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
 
             elif self.operatorController.getRawButton(3):
-                self.elevator.set(ElevSetpoint.LOW)
+                self.elevator.set(EelevConst.Setpoint.LOW)
 
             elif self.operatorController.getRawButton(4):
-                self.elevator.set(ElevSetpoint.HIGH)
+                self.elevator.set(EelevConst.Setpoint.HIGH)
         else:
             # Manual mode
             if self.operatorController.getRawButton(7):
