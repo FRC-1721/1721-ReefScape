@@ -30,7 +30,7 @@ def elevator(mock_motor):
     Creates an Elevator instance and injects a mock motor.
     """
     elevator = Elevator()
-    elevator.elevatorMotor1 = mock_motor  # Inject the shared mock motor
+    elevator.elevatorMotor = mock_motor  # Inject the shared mock motor
     return elevator
 
 
@@ -50,7 +50,7 @@ def test_pid_control(elevator):
     elevator.execute()  # Run one control loop cycle
 
     # Ensure some correction is applied
-    assert elevator.elevatorMotor1.output != 0
+    assert elevator.elevatorMotor.output != 0
 
 
 def test_position_feedback(elevator):

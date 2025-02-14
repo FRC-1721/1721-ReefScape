@@ -22,6 +22,9 @@ rush:	## Deploy now! (With netconsole)
 push:	## Deploy to the robot (push only, no netconsole)
 	robotpy deploy
 
+rushpush:
+	python -m robotpy deploy --no-install --skip-test
+
 sync:		## Sync robotpy requirements
 	robotpy sync
 
