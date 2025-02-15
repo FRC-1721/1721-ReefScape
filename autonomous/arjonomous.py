@@ -40,7 +40,7 @@ class ArjAuto(AutonomousStateMachine):
 
     @state()
     def arject(self, tm, initial_call):
-        self.intake.eject()
+        # self.intake.eject(0.3)
         if tm > 3:
             self.next_state("ardone")
 
