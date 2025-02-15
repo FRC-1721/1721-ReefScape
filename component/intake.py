@@ -15,7 +15,8 @@ class Intake:
     intakeMotor: Const.IntakeMotorClass
 
     intaking = will_reset_to(None)
-    goal_pos = Const.PosIn
+    # goal_pos = Const.PosIn
+    goal_pos = will_reset_to(0)
     controller = Const.Controller
     feed_forward = Const.FFController
 
@@ -33,8 +34,11 @@ class Intake:
             if self.intaking:
                 self.intakeMotor.set(Const.IntakeIntake)
             else:
-                self.intakeMotor.set(Const.IntakeEject)
+                self.intakeMotor.set(Const.IntakeEject * 0.5)
+        else:
+            self.intakeMotor.set(0)
 
-        current_position = self.posMotor.get_position().value
-        pid_output = self.controller.calculate(current_position, self.goal_pos)
-        self.posMotor.set(Const.clamp(pid_output))
+        self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
+        # current_position = self.posMotor.get_position().value
+        # pid_output = self.controller.calculate(current_position, self.goal_pos)
+        # self.posMotor.set(Const.clamp(pid_output))

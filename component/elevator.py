@@ -18,13 +18,12 @@ class Elevator:
     elevatorMotor: Const.MotorClass
     elevatorMotor2: Const.MotorClass
 
-    x = will_reset_to(Const.Setpoint.HOME)
-
     controller = Const.Controller
     feedforward = Const.FFController
 
     def __init__(self):
         # Flags
+        self.x = Const.Setpoint.HOME
         self._manual_mode = False  # Internal flag (default: False)
 
     def setup(self):
@@ -45,6 +44,7 @@ class Elevator:
         """
         if util.value_changed("elevator_manual_mode", enabled):
             logging.info(f"Elevator manual mode {'ENABLED' if enabled else 'DISABLED'}")
+            print(f"Elevator manual mode {'ENABLED' if enabled else 'DISABLED'}")
             if not enabled:
                 self.x = self.get_position()
         self._manual_mode = enabled
@@ -65,7 +65,7 @@ class Elevator:
 
         if not self._manual_mode:
             # Apply PID + FF control
-            print(f"{output} --> {Const.clamp(output)}")
+            # print(f"{output} --> {Const.clamp(output)}")
             self.elevatorMotor.set(Const.clamp(output))
         else:
             # Manually override to direct control
