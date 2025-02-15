@@ -36,3 +36,7 @@ def maxproportional(v):  # i forgor
     return lambda *args: tuple(
         map(lambda x, v=v: x * (v / max(map(abs, args + (1,)))), args)
     )
+
+
+def deadzone(zone):
+    return lambda x: 0 if abs(x) < zone else x

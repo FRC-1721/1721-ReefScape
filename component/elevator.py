@@ -54,6 +54,7 @@ class Elevator:
         Run control loop for the elevator.
         """
 
+
         # TODO Use something other than the motor itself as the encoder
         current_position = self.elevatorMotor.get_position().value
 

@@ -17,6 +17,8 @@ from component.swerve import Swerve
 from component.elevator import Elevator
 from component.intake import Intake
 
+import util
+
 # Sim
 # from physics import PhysicsEngine
 
@@ -94,49 +96,46 @@ class Robot(MagicRobot):
         # elevator movements
         # presets
         # if self.operatorController.getRawButton(8):
-        if True:
+        if False:
             self.elevator.set_manual_mode(True)
         else:
             self.elevator.set_manual_mode(False)
 
         if not self.elevator.is_manual_mode():
-            ...
             # TODO update preset points
-            # if self.operatorController.getRawButtonPressed(2):
-            #     self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
-            # if self.operatorController.getRawButtonReleased(2):
-            #     self.elevator.set(EelevConst.Setpoint.HOME)
+            if self.operatorController.getRawButtonPressed(2):
+                self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
+            if self.operatorController.getRawButtonReleased(2):
+                self.elevator.set(EelevConst.Setpoint.HOME)
 
-            # if self.operatorController.getRawButtonPressed(3):
-            #     self.elevator.set(EelevConst.Setpoint.L1)
-            # if self.operatorController.getRawButtonReleased(3):
-            #     self.elevator.set(EelevConst.Setpoint.HOME)
+            if self.operatorController.getRawButtonPressed(3):
+                self.elevator.set(EelevConst.Setpoint.L1)
+            if self.operatorController.getRawButtonReleased(3):
+                self.elevator.set(EelevConst.Setpoint.HOME)
 
-            # if self.operatorController.getRawButtonPressed(4):
-            #     self.elevator.set(EelevConst.Setpoint.L2)
-            # if self.operatorController.getRawButtonReleased(4):
-            #     self.elevator.set(EelevConst.Setpoint.HOME)
+            if self.operatorController.getRawButtonPressed(4):
+                self.elevator.set(EelevConst.Setpoint.L2)
+            if self.operatorController.getRawButtonReleased(4):
+                self.elevator.set(EelevConst.Setpoint.HOME)
+
+            if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
+                self.elevator.x = max(
+                    0,
+                    self.elevatorMotor.get_position().value - (x * EelevConst.dampen),
+                )
+            if util.value_changed("elevatorX", x) and x == 0:
+                self.elevator.x = self.elevatorMotor.get_position().value
+
         else:
             # Manual mode
-            # if self.operatorController.getRawButton(7):
-            if False:
-                ...
-                # if self.operatorController.getRawButton(4):
-                #     print("UP")
-                #     self.elevator.set(EelevConst.up)
-
-                # elif self.operatorController.getRawButton(1):
-                #     print("DOWN")
-                #     self.elevator.set(EelevConst.down)
-
-                # else:
-                #     if self.elevator.get_position() > 0.1:
-                #         self.elevator.set(EelevConst.stay)
-            else:
-                self.elevator.set(
-                    -self.operatorController.getRawAxis(5) * EelevConst.dampen
-                    + (EelevConst.stay if self.elevatorMotor.get_position() else 0)
+            self.elevator.set(
+                -self.operatorController.getRawAxis(5) * EelevConst.manualdampen
+                + (
+                    EelevConst.stay
+                    if self.elevatorMotor.get_position().value < 3
+                    else 0
                 )
+            )
 
         # INTAKE movements
         if self.operatorController.getRawButton(5):

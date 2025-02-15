@@ -19,7 +19,9 @@ up = 0.5
 stay = 0.025
 down = 0.002
 
-dampen = 0.5
+deadzone = util.deadzone(0.01)
+dampen = 6
+manualdampen = 0.5
 clamp = util.clamp(0.4, -0.1)
 
 config = phoenix6.configs.TalonFXConfiguration()
@@ -29,9 +31,9 @@ config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 Controller = wpimath.controller.PIDController(
     *(
         PID := [
-            P := 0.035,
-            I := 0.01,
-            D := 0.000,
+            P := 0.120,
+            I := 0.16,
+            D := 0.0036,
         ]
     )
 )
@@ -40,7 +42,7 @@ FFController = wpimath.controller.ElevatorFeedforward(  # Feedforward
     *(
         FF := [
             kS := 0.00,  # Static friction feedforward
-            kG := 0.022,
+            kG := 0.019,
             kV := 0.00,  # Velocity feedforward
             kA := 0.000,  # Acceleration feedforward
         ]
