@@ -48,3 +48,4 @@ PosOut = 0
 # Intake/Eject speeds
 IntakeIntake = -0.2
 IntakeEject = 0.7
+IntakeDampen = 1

@@ -16,6 +16,7 @@ class Intake:
 
     intaking = will_reset_to(None)
     # goal_pos = Const.PosIn
+    eject_dampen = will_reset_to(Const.IntakeDampen)
     goal_pos = will_reset_to(0)
     controller = Const.Controller
     feed_forward = Const.FFController
@@ -23,8 +24,9 @@ class Intake:
     def intake(self):
         self.intaking = True
 
-    def eject(self):
+    def eject(self, dampen=Const.IntakeDampen):
         self.intaking = False
+        self.eject_dampen = dampen
 
     def set(self, setpoint):
         self.goal_pos = setpoint
@@ -34,7 +36,7 @@ class Intake:
             if self.intaking:
                 self.intakeMotor.set(Const.IntakeIntake)
             else:
-                self.intakeMotor.set(Const.IntakeEject * 0.5)
+                self.intakeMotor.set(Const.IntakeEject * self.eject_dampen)
         else:
             self.intakeMotor.set(0)
 
