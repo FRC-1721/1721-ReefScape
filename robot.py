@@ -162,3 +162,6 @@ class Robot(MagicRobot):
             or self.driveController.getRawAxis(3) > 0.5
         ):
             self.swerve.brake()
+
+        if self.controller.getRawButton(9):
+            self.swerve.zeroGyro()
