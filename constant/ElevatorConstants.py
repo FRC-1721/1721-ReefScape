@@ -31,8 +31,8 @@ config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 Controller = wpimath.controller.PIDController(
     *(
         PID := [
-            P := 0.120,
-            I := 0.16,
+            P := 0.150,
+            I := 0.0,
             D := 0.0036,
         ]
     )
@@ -57,6 +57,6 @@ class Setpoint:
     HOME = 7
     SRC = 0
     TROUGH = 0
-    L1 = 15
-    L2 = 22.6
-    L3 = 45
+    L1 = 25.25
+    L2 = 47.65
+    L3 = 0
