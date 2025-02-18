@@ -43,7 +43,7 @@ clamp = util.clamp(0.5, -0.5)
 
 # In Out positions
 PosIn = 0
-PosOut = 0
+PosOut = 45
 
 # Intake/Eject speeds
 IntakeIntake = -0.2

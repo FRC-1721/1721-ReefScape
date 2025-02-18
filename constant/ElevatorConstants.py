@@ -58,5 +58,5 @@ class Setpoint:
     SRC = 0
     TROUGH = 0
     L1 = 15
-    L2 = 35
-    L3 = 0
+    L2 = 22.6
+    L3 = 45

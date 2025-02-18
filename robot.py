@@ -109,7 +109,7 @@ class Robot(MagicRobot):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
             if self.operatorController.getRawButtonPressed(3):
-                self.elevator.set(EelevConst.Setpoint.L1)
+                self.elevator.set(EelevConst.Setpoint.L3)
             if self.operatorController.getRawButtonReleased(3):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
