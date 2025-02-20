@@ -108,12 +108,12 @@ class Robot(MagicRobot):
             elif self.operatorController.getRawButtonReleased(2):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
-            elif self.operatorController.getRawButtonPressed(3):
+            if self.operatorController.getRawButtonPressed(3):
                 self.elevator.set(EelevConst.Setpoint.L2)
             elif self.operatorController.getRawButtonReleased(3):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
-            elif self.operatorController.getRawButtonPressed(4):
+            if self.operatorController.getRawButtonPressed(4):
                 self.elevator.set(EelevConst.Setpoint.L1)
             elif self.operatorController.getRawButtonReleased(4):
                 self.elevator.set(EelevConst.Setpoint.HOME)
@@ -142,6 +142,7 @@ class Robot(MagicRobot):
             self.intake.intake()
         elif self.operatorController.getRawButton(6):
             self.intake.eject()
+
         if (self.operatorController.getRawAxis(2) >= 0.05) == True:
             self.intake.set(IntakeConstants.PosOut)
         else:
