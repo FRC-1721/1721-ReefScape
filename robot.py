@@ -105,17 +105,17 @@ class Robot(MagicRobot):
             # TODO update preset points
             if self.operatorController.getRawButtonPressed(2):
                 self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
-            if self.operatorController.getRawButtonReleased(2):
+            elif self.operatorController.getRawButtonReleased(2):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
-            if self.operatorController.getRawButtonPressed(3):
+            elif self.operatorController.getRawButtonPressed(3):
                 self.elevator.set(EelevConst.Setpoint.L2)
-            if self.operatorController.getRawButtonReleased(3):
+            elif self.operatorController.getRawButtonReleased(3):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
-            if self.operatorController.getRawButtonPressed(4):
+            elif self.operatorController.getRawButtonPressed(4):
                 self.elevator.set(EelevConst.Setpoint.L1)
-            if self.operatorController.getRawButtonReleased(4):
+            elif self.operatorController.getRawButtonReleased(4):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
             if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
@@ -140,7 +140,7 @@ class Robot(MagicRobot):
         # INTAKE movements
         if self.operatorController.getRawButton(5):
             self.intake.intake()
-        if self.operatorController.getRawButton(6):
+        elif self.operatorController.getRawButton(6):
             self.intake.eject()
         if (self.operatorController.getRawAxis(2) >= 0.05) == True:
             self.intake.set(IntakeConstants.PosOut)

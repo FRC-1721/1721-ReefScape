@@ -21,6 +21,9 @@ class Intake:
     controller = Const.Controller
     feed_forward = Const.FFController
 
+    def setup(self):
+        self.manual = False  # manual trigger
+
     def intake(self):
         self.intaking = True
 
@@ -28,8 +31,9 @@ class Intake:
         self.intaking = False
         self.eject_dampen = dampen
 
-    def set(self, setpoint):
+    def set(self, setpoint, mode):
         self.goal_pos = setpoint
+        self.manual = mode
 
     def execute(self):
         if self.intaking is not None:
@@ -38,9 +42,12 @@ class Intake:
             else:
                 self.intakeMotor.set(Const.IntakeEject * self.eject_dampen)
         else:
-            self.intakeMotor.set(0)  
+            self.intakeMotor.set(0)
 
-        # self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
-        current_position = self.posMotor.get_position().value
-        pid_output = self.controller.calculate(current_position, self.goal_pos)
-        self.posMotor.set(Const.clamp(pid_output))
+        if self.manual:
+            self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
+
+        else:
+            current_position = self.posMotor.get_position().value
+            pid_output = self.controller.calculate(current_position, self.goal_pos)
+            self.posMotor.set(Const.clamp(pid_output))
