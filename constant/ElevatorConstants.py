@@ -20,8 +20,8 @@ stay = 0.025
 down = 0.002
 
 deadzone = util.deadzone(0.01)
-dampen = 6
-manualdampen = 0.5
+dampen = 1
+manualdampen = 1
 clamp = util.clamp(0.4, -0.1)
 
 config = phoenix6.configs.TalonFXConfiguration()
@@ -54,9 +54,9 @@ class Setpoint:
     MIN_HEIGHT = 0.0  # Minimum Height
     LAURA = 76.8  # Maximum Height
 
-    HOME = 7
+    HOME = 0
     SRC = 0
     TROUGH = 0
-    L1 = 25.25
-    L2 = 47.65
+    L1 = 30.3
+    L2 = 52.7
     L3 = 0

@@ -38,9 +38,9 @@ class Intake:
             else:
                 self.intakeMotor.set(Const.IntakeEject * self.eject_dampen)
         else:
-            self.intakeMotor.set(0)
+            self.intakeMotor.set(0)  
 
-        self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
-        # current_position = self.posMotor.get_position().value
-        # pid_output = self.controller.calculate(current_position, self.goal_pos)
-        # self.posMotor.set(Const.clamp(pid_output))
+        # self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
+        current_position = self.posMotor.get_position().value
+        pid_output = self.controller.calculate(current_position, self.goal_pos)
+        self.posMotor.set(Const.clamp(pid_output))

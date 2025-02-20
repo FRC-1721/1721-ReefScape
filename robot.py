@@ -109,12 +109,12 @@ class Robot(MagicRobot):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
             if self.operatorController.getRawButtonPressed(3):
-                self.elevator.set(EelevConst.Setpoint.L3)
+                self.elevator.set(EelevConst.Setpoint.L2)
             if self.operatorController.getRawButtonReleased(3):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
             if self.operatorController.getRawButtonPressed(4):
-                self.elevator.set(EelevConst.Setpoint.L2)
+                self.elevator.set(EelevConst.Setpoint.L1)
             if self.operatorController.getRawButtonReleased(4):
                 self.elevator.set(EelevConst.Setpoint.HOME)
 
@@ -142,7 +142,10 @@ class Robot(MagicRobot):
             self.intake.intake()
         if self.operatorController.getRawButton(6):
             self.intake.eject()
-        self.intake.set(self.operatorController.getRawAxis(1))
+        if (self.operatorController.getRawAxis(2) >= 0.05) == True:
+            self.intake.set(IntakeConstants.PosOut)
+        else:
+            self.intake.set(IntakeConstants.PosIn)
 
         # update robot pose based on AprilTags
         # if tid != -1:

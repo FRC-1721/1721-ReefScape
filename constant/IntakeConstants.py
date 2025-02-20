@@ -20,7 +20,7 @@ IntakeMotor = [
 Controller = wpimath.controller.PIDController(
     *(
         PID := [
-            P := 1,
+            P := 0.1,
             I := 0,
             D := 0,
         ]
@@ -43,7 +43,7 @@ clamp = util.clamp(0.5, -0.5)
 
 # In Out positions
 PosIn = 0
-PosOut = 45
+PosOut = -46
 
 # Intake/Eject speeds
 IntakeIntake = -0.2
