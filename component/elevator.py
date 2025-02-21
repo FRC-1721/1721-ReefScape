@@ -54,7 +54,6 @@ class Elevator:
         Run control loop for the elevator.
         """
 
-
         # TODO Use something other than the motor itself as the encoder
         current_position = self.elevatorMotor.get_position().value
 
@@ -71,6 +70,10 @@ class Elevator:
         else:
             # Manually override to direct control
             self.elevatorMotor.set(self.x)
+
+    def isReady(self, desiredPOS):
+        if round(self.elevatorMotor.get_position()) == desiredPOS:
+            return True
 
     @feedback
     def goal(self) -> float:

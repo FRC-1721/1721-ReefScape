@@ -31,6 +31,10 @@ class Intake:
     def set(self, setpoint):
         self.goal_pos = setpoint
 
+    def isReady(self, desiredPOS):
+        if round(self.posMotor.get_position()) == desiredPOS:
+            return True
+
     def execute(self):
         if self.intaking is not None:
             if self.intaking:
