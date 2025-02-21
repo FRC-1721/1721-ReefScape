@@ -72,7 +72,7 @@ class Elevator:
             self.elevatorMotor.set(self.x)
 
     def isReady(self, desiredPOS):
-        if round(self.elevator.get_position()) == desiredPOS:
+        if round(self.get_position()) == desiredPOS:
             return True
 
     @feedback
