@@ -17,6 +17,9 @@ from component.swerve import Swerve
 from component.elevator import Elevator
 from component.intake import Intake
 
+# state machines
+from stateMachine.reef import Reef
+
 import util
 
 # Sim
@@ -24,10 +27,13 @@ import util
 
 
 class Robot(MagicRobot):
-
+    # components
     swerve: Swerve
     elevator: Elevator
     intake: Intake
+
+    # state machines
+    reef: Reef
 
     def robotInit(self):
         super().robotInit()
@@ -102,29 +108,35 @@ class Robot(MagicRobot):
             self.elevator.set_manual_mode(False)
 
         if not self.elevator.is_manual_mode():
-            # TODO update preset points
-            if self.operatorController.getRawButtonPressed(2):
-                self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
-            elif self.operatorController.getRawButtonReleased(2):
-                self.elevator.set(EelevConst.Setpoint.HOME)
+            # TODO readd if the state machine doesn't work
+            # if self.operatorController.getRawButtonPressed(2):
+            #     self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
+            # elif self.operatorController.getRawButtonReleased(2):
+            #     self.elevator.set(EelevConst.Setpoint.HOME)
+
+            # if self.operatorController.getRawButtonPressed(3):
+            #     self.elevator.set(EelevConst.Setpoint.L2)
+            # elif self.operatorController.getRawButtonReleased(3):
+            #     self.elevator.set(EelevConst.Setpoint.HOME)
+
+            # if self.operatorController.getRawButtonPressed(4):
+            #     self.elevator.set(EelevConst.Setpoint.L1)
+            # elif self.operatorController.getRawButtonReleased(4):
+            #     self.elevator.set(EelevConst.Setpoint.HOME)
+
+            # # TODO write a comment to describe what these do
+            # if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
+            #     self.elevator.x = max(
+            #         0,
+            #         self.elevatorMotor.get_position().value - (x * EelevConst.dampen),
+            #     )
+            # if util.value_changed("elevatorX", x) and x == 0:
+            #     self.elevator.x = self.elevatorMotor.get_position().value
 
             if self.operatorController.getRawButtonPressed(3):
-                self.elevator.set(EelevConst.Setpoint.L2)
-            elif self.operatorController.getRawButtonReleased(3):
-                self.elevator.set(EelevConst.Setpoint.HOME)
-
-            if self.operatorController.getRawButtonPressed(4):
-                self.elevator.set(EelevConst.Setpoint.L1)
-            elif self.operatorController.getRawButtonReleased(4):
-                self.elevator.set(EelevConst.Setpoint.HOME)
-
-            if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
-                self.elevator.x = max(
-                    0,
-                    self.elevatorMotor.get_position().value - (x * EelevConst.dampen),
-                )
-            if util.value_changed("elevatorX", x) and x == 0:
-                self.elevator.x = self.elevatorMotor.get_position().value
+                self.reef.start(EelevConst.Setpoint.L2)
+            elif self.operatorController.getRawButtonPressed(4):
+                self.reef.start(EelevConst.Setpoint.L1)
 
         else:
             # Manual mode
@@ -144,7 +156,7 @@ class Robot(MagicRobot):
             self.intake.eject()
 
         if (self.operatorController.getRawAxis(2) >= 0.05) == True:
-            self.intake.set(IntakeConstants.PosOut)
+            self.ShooterControl.set(IntakeConstants.PosOut)
         else:
             self.intake.set(IntakeConstants.PosIn)
 

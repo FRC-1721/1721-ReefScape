@@ -1,10 +1,16 @@
+# import magic
 from magicbot import StateMachine, state, timed_state
 
-from constant import IntakeConstants as intCosnt
+# import constants
+from constant import IntakeConstants as intconst
 from constant import ElevatorConstants as eliConst
 
+# import components
+from component.elevator import Elevator
+from component.intake import Intake
 
-class ShooterControl(StateMachine):
+
+class Reef(StateMachine):
     elevator: Elevator
     intake: Intake
 
@@ -21,9 +27,9 @@ class ShooterControl(StateMachine):
 
     @state(must_finish=True)
     def out(self):
-        self.intake.set(intCosnt.PosOut)
+        self.intake.set(intconst.PosOut)
 
-        if self.intake.isReady(intCosnt.PosOut):
+        if self.intake.isReady(intconst.PosOut):
             self.next_state_now("blow")
 
     @timed_state(duration=1, must_finish=True)
@@ -34,9 +40,9 @@ class ShooterControl(StateMachine):
 
     @state(must_finish=True)
     def inwards(self):
-        self.intake.set(intCosnt.PosIn)
+        self.intake.set(intconst.PosIn)
 
-        if self.intake.isReady(intCosnt.PosIn):
+        if self.intake.isReady(intconst.PosIn):
             self.next_state_now("down")
 
     @timed_state(duration=1)
