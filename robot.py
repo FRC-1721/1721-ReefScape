@@ -17,8 +17,8 @@ from component.swerve import Swerve
 from component.elevator import Elevator
 from component.intake import Intake
 
-# state machines
-from stateMachine.reef import Reef
+# High Level Components
+from component.elevatorControl import ElevatorControl
 
 import util
 
@@ -27,13 +27,15 @@ import util
 
 
 class Robot(MagicRobot):
+    # high level components should go first
+    elevator_control: ElevatorControl
+
     # components
     swerve: Swerve
     elevator: Elevator
     intake: Intake
 
     # state machines
-    reef: Reef
 
     def robotInit(self):
         super().robotInit()
@@ -124,19 +126,19 @@ class Robot(MagicRobot):
             # elif self.operatorController.getRawButtonReleased(4):
             #     self.elevator.set(EelevConst.Setpoint.HOME)
 
-            # # TODO write a comment to describe what these do
-            # if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
-            #     self.elevator.x = max(
-            #         0,
-            #         self.elevatorMotor.get_position().value - (x * EelevConst.dampen),
-            #     )
-            # if util.value_changed("elevatorX", x) and x == 0:
-            #     self.elevator.x = self.elevatorMotor.get_position().value
+            # Move elevator up and down using PIDs
+            if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
+                self.elevator.set(
+                    self.elevator.get_position() - (x * EelevConst.dampen),
+                )
+            if util.value_changed("elevatorX", x) and x == 0:
+                self.elevator.set(self.elevator.get_position())
 
+            # ElevatorControl with Setpoints
             if self.operatorController.getRawButtonPressed(3):
-                self.reef.start(EelevConst.Setpoint.L2)
+                self.elevator_control.start(EelevConst.Setpoint.L2)
             elif self.operatorController.getRawButtonPressed(4):
-                self.reef.start(EelevConst.Setpoint.L1)
+                self.elevator_control.start(EelevConst.Setpoint.L1)
 
         else:
             # Manual mode

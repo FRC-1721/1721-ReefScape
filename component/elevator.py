@@ -71,9 +71,8 @@ class Elevator:
             # Manually override to direct control
             self.elevatorMotor.set(self.x)
 
-    def isReady(self, desiredPOS):
-        if round(self.get_position()) == desiredPOS:
-            return True
+    def isReady(self, offset=0.1):
+        return abs(self.get_position() - self.x) < offset
 
     @feedback
     def goal(self) -> float:

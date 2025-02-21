@@ -10,7 +10,7 @@ from component.elevator import Elevator
 from component.intake import Intake
 
 
-class Reef(StateMachine):
+class ElevatorControl(StateMachine):
     elevator: Elevator
     intake: Intake
 
@@ -22,7 +22,7 @@ class Reef(StateMachine):
     def lift(self):
         self.elevator.set(self.level)
 
-        if self.elevator.isReady(self.level):
+        if self.elevator.isReady():
             self.next_state_now("out")
 
     @state(must_finish=True)
