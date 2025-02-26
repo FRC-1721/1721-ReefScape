@@ -78,7 +78,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: "<@614313406345904148> Simulator failed in ${{ github.event.pull_request.html_url }}!"
+          args: "<@&614313406345904148> Simulator failed in ${{ github.event.pull_request.html_url }}!"
 
   unit_test:
     name: pyfrc Unit Tests
@@ -118,4 +118,4 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: "<@614313406345904148> Unit tests failed in ${{ github.event.pull_request.html_url }}!"
+          args: "<@&614313406345904148> Unit tests failed in ${{ github.event.pull_request.html_url }}!"

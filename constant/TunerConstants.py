@@ -87,8 +87,8 @@ _drive_gear_ratio = 6.23
 _steer_gear_ratio = 25
 _wheel_radius: units.meter = inchesToMeters(2)
 
-_invert_left_side = False
-_invert_right_side = True
+_invert_left_side = True
+_invert_right_side = False
 
 _pigeon_id = 39
 
