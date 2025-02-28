@@ -70,8 +70,7 @@ class Elevator:
         if not self._manual_mode:
             # Apply PID + FF control
             # print(f"{output} --> {Const.clamp(output)}")
-            #self.elevatorMotor.set(Const.clamp(output))
-            ...
+            self.elevatorMotor.set(Const.clamp(output))
         else:
             # Manually override to direct control
             self.elevatorMotor.set(self.x)
