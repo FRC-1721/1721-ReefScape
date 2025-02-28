@@ -123,7 +123,7 @@ class Robot(MagicRobot):
             if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
                 self.elevator.x = max(
                     0,
-                    self.elevatorMotor.get_position().value - (x * EelevConst.dampen),
+                    self.elevatorMotor.get_position().value - (x * 3 * EelevConst.dampen),
                 )
             if util.value_changed("elevatorX", x) and x == 0:
                 self.elevator.x = self.elevatorMotor.get_position().value
