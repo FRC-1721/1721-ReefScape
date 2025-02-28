@@ -72,6 +72,8 @@ class Robot(MagicRobot):
             *IntakeConstants.IntakeMotor
         )
 
+        self.elevatorLimit = EelevConst.LimitClass(EelevConst.LimitID)
+
     def teleopPeriodic(self):
         # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
 
@@ -96,10 +98,10 @@ class Robot(MagicRobot):
         # elevator movements
         # presets
         # if self.operatorController.getRawButton(8):
-        if False:
-            self.elevator.set_manual_mode(True)
-        else:
-            self.elevator.set_manual_mode(False)
+        #if False:
+        #    self.elevator.set_manual_mode(True)
+        #else:
+        self.elevator.set_manual_mode(False)
 
         if not self.elevator.is_manual_mode():
             # TODO update preset points
@@ -145,6 +147,7 @@ class Robot(MagicRobot):
         if (self.operatorController.getRawAxis(2) >= 0.05) == True:
             self.intake.set(IntakeConstants.PosOut)
         else:
+
             self.intake.set(IntakeConstants.PosIn)
 
         # update robot pose based on AprilTags

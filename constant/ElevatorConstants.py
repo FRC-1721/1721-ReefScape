@@ -1,19 +1,19 @@
 import wpimath.controller
+from wpilib import DigitalInput
 import phoenix6
 import util
 
 
 Motor1ID = 14
 Motor2ID = 15
-EncoderID = 16
+LimitID = 0
 
 MotorClass = phoenix6.hardware.talon_fx.TalonFX
+LimitClass = DigitalInput
 
 # CAN Bus
-# TODO: Change to "can of war" lol
-Motor1Canbus = "rio"
-Motor2Canbus = "rio"
-EncoderCanbus = "rio"
+Motor1Canbus = "intakebus"
+Motor2Canbus = "intakebus"
 
 up = 0.5
 stay = 0.025
@@ -32,7 +32,7 @@ Controller = wpimath.controller.PIDController(
     *(
         PID := [
             P := 0.150,
-            I := 0.0,
+            I := 0.02,
             D := 0.0036,
         ]
     )

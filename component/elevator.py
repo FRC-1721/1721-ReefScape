@@ -17,6 +17,7 @@ class Elevator:
     # Hardware
     elevatorMotor: Const.MotorClass
     elevatorMotor2: Const.MotorClass
+    elevatorLimit: Const.LimitClass
 
     controller = Const.Controller
     feedforward = Const.FFController
@@ -53,7 +54,9 @@ class Elevator:
         """
         Run control loop for the elevator.
         """
-
+        if self.elevatorLimit.get(): self.elevatorMotor.set_position(0)
+        if self.get_position() <= 0 and not self.elevatorLimit.get():
+            self.elevatorMotor.set_position(5)
 
         # TODO Use something other than the motor itself as the encoder
         current_position = self.elevatorMotor.get_position().value
@@ -67,10 +70,15 @@ class Elevator:
         if not self._manual_mode:
             # Apply PID + FF control
             # print(f"{output} --> {Const.clamp(output)}")
-            self.elevatorMotor.set(Const.clamp(output))
+            #self.elevatorMotor.set(Const.clamp(output))
+            ...
         else:
             # Manually override to direct control
             self.elevatorMotor.set(self.x)
+    
+    @feedback()
+    def limit(self) -> bool:
+        return self.elevatorLimit.get()
 
     @feedback
     def goal(self) -> float:

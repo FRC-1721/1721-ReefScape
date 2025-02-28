@@ -32,6 +32,7 @@ class Intake:
         self.goal_pos = setpoint
 
     def execute(self):
+        """
         if self.intaking is not None:
             if self.intaking:
                 self.intakeMotor.set(Const.IntakeIntake)
@@ -44,3 +45,6 @@ class Intake:
         current_position = self.posMotor.get_position().value
         pid_output = self.controller.calculate(current_position, self.goal_pos)
         self.posMotor.set(Const.clamp(pid_output))
+    """
+        
+    ...

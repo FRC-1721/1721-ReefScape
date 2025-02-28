@@ -22,7 +22,7 @@ Controller = wpimath.controller.PIDController(
         PID := [
             P := 0.1,
             I := 0,
-            D := 0,
+            D := 0.05,
         ]
     )
 )
