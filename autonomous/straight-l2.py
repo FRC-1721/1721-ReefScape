@@ -7,15 +7,15 @@ from magicbot import AutonomousStateMachine, state, timed_state
 from component.swerve import Swerve
 from component.intake import Intake
 
-from constant import IntakeConstants
+from constant import IntakeConstants, ElevatorConstants
 
 # quick template for making autos
 
 
-class ArjAuto(AutonomousStateMachine):
+class StraightL2Auto(AutonomousStateMachine):
 
-    MODE_NAME = "Arjominous Arjonomous"
-    DEFAULT = True
+    MODE_NAME = "Straight - L2"
+    DEFAULT = False
     DISABLED = False
 
     # Components
@@ -31,19 +31,19 @@ class ArjAuto(AutonomousStateMachine):
     def armove(self, initial_call):
         distance_driven = self.swerve.pose()[0] - self.startx
 
-        if distance_driven < 1.5:
+        if distance_driven < 1.4:
             self.swerve.go(0.5, 0, 0, False)
         else:
             self.next_state("arjown")
 
-    @timed_state(duration=3, next_state="arject")
+    @timed_state(duration=5, next_state="arject")
     def arjown(self):
         self.intake.set(IntakeConstants.PosOut)
+        self.elevator.set(ElevatorConstants.Setpoint.L2)
 
-    @timed_state(duration=2, next_state="ardone")
+    @timed_state(duration=1, next_state="ardone")
     def arject(self):
-        self.intake.set(IntakeConstants.PosOut)
-        self.intake.eject(0.3)
+        self.intake.eject()
 
     @state()
     def ardone(self):

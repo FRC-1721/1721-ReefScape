@@ -41,12 +41,14 @@ class Intake:
         else:
             self.intakeMotor.set(0)
 
+        if self.pos() < Const.PosOut:
+            self.posMotor.set((Const.PosOut - self.pos()) * 0.3)
         # Don't move past PosOut position
         # print(self.posMotor.get_position().value, Const.PosOut)
-        current_position = self.posMotor.get_position().value
-        pid_output = self.controller.calculate(current_position, self.goal_pos)
-        # self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
-        self.posMotor.set(Const.clamp(pid_output))
+        # current_position = self.posMotor.get_position().value
+        # pid_output = self.controller.calculate(current_position, self.goal_pos)
+        # # self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
+        # self.posMotor.set(Const.clamp(pid_output))
 
     @feedback
     def pos(self) -> float:
