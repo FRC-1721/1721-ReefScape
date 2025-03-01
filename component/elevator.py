@@ -38,24 +38,12 @@ class Elevator:
         """Set the target position for the elevator."""
         self.x = goal
 
-    def set_manual_mode(self, enabled: bool):
-        """
-        Enables or disables manual mode.
-        :param enabled: True to enable manual mode, False to disable.
-        """
-        if util.value_changed("elevator_manual_mode", enabled):
-            logging.info(f"Elevator manual mode {'ENABLED' if enabled else 'DISABLED'}")
-            print(f"Elevator manual mode {'ENABLED' if enabled else 'DISABLED'}")
-            if not enabled:
-                self.x = self.get_position()
-        self._manual_mode = enabled
-
     def execute(self):
         """
         Run control loop for the elevator.
         """
-        #if self.elevatorLimit.get(): self.elevatorMotor.set_position(0)
-        #if self.get_position() <= 0 and not self.elevatorLimit.get():
+        # if self.elevatorLimit.get(): self.elevatorMotor.set_position(0)
+        # if self.get_position() <= 0 and not self.elevatorLimit.get():
         #    self.elevatorMotor.set_position(5)
 
         # TODO Use something other than the motor itself as the encoder
@@ -67,15 +55,14 @@ class Elevator:
 
         output = pid_output + ff_output
 
-        if not self._manual_mode:
-            # Apply PID + FF control
-            # print(f"{output} --> {Const.clamp(output)}")
-            if (not (self.get_position() <= 0 and output <= 0)):
-                self.elevatorMotor.set(Const.clamp(output))
-        else:
-            # Manually override to direct control
-            self.elevatorMotor.set(self.x)
-    
+        # Apply PID + FF control
+        # print(f"{output} --> {Const.clamp(output)}")
+        if not (self.get_position() <= 0 and output <= 0):
+            self.elevatorMotor.set(Const.clamp(output))
+
+    def threshhold(self, value, threshhold=5, dampen=0.3):
+        return value * (1 if value <= threshhold else dampen)
+
     @feedback()
     def limit(self) -> bool:
         return self.elevatorLimit.get()

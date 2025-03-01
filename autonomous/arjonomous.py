@@ -7,6 +7,8 @@ from magicbot import AutonomousStateMachine, state, timed_state
 from component.swerve import Swerve
 from component.intake import Intake
 
+from constant import IntakeConstants
+
 # quick template for making autos
 
 
@@ -21,29 +23,26 @@ class ArjAuto(AutonomousStateMachine):
     intake: Intake
 
     @timed_state(duration=0.5, next_state="armove", first=True)
-    def arwait(self, tm, initial_call):
-        pass
+    def arwait(self):
+        self.startx = self.swerve.pose()[0]
+        logging.debug(f"ArjAuto set startx to {self.startx}")
 
     @state()
-    def armove(self, tm, initial_call):
-        if initial_call:
-            # This is the first time this function runs
-            self.startx = self.swerve.pose()[0]
-            logging.debug(f"ArjAuto set startx to {self.startx}")
-
+    def armove(self, initial_call):
         distance_driven = self.swerve.pose()[0] - self.startx
 
         if distance_driven < 2.3:
             self.swerve.go(0.7, 0, 0, False)
         else:
-            self.next_state("arject")
+            self.next_state("arjown")
+
+    @timed_state(duration=3, next_state="arject")
+    def arjown(self):
+        self.intake.set(0.3)
+
+    @timedstate(duration=1, next_state="ardone")
+    def arject(self):
 
     @state()
-    def arject(self, tm, initial_call):
-        # self.intake.eject(0.3)
-        if tm > 3:
-            self.next_state("ardone")
-
-    @state()
-    def ardone(self, tm, initial_call):
+    def ardone(self):
         self.swerve.brake()

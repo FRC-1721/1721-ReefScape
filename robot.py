@@ -68,6 +68,7 @@ class Robot(MagicRobot):
 
         # Intake Motors
         self.posMotor = IntakeConstants.PosMotorClass(*IntakeConstants.PosMotor)
+        self.posMotor.set_position(0)
         self.intakeMotor = IntakeConstants.IntakeMotorClass(
             *IntakeConstants.IntakeMotor
         )
@@ -85,10 +86,13 @@ class Robot(MagicRobot):
         #     )
 
         # if:
+        dampen = 1
+        if self.elevator.get_position() > 5:
+            dampen = 0.3
         self.swerve.go(
-            -self.driveController.getRawAxis(1),
-            -self.driveController.getRawAxis(0),
-            self.driveController.getRawAxis(4),
+            -self.driveController.getRawAxis(1) * dampen,
+            -self.driveController.getRawAxis(0) * dampen,
+            self.driveController.getRawAxis(4) * dampen,
             not self.driveController.getRawButton(5),  # field centric toggle
         )
 
@@ -96,15 +100,10 @@ class Robot(MagicRobot):
             self.swerve.tare_everything()
 
         # elevator movements
-        # presets
-        # if self.operatorController.getRawButton(8):
-        #if False:
-        #    self.elevator.set_manual_mode(True)
-        #else:
-        self.elevator.set_manual_mode(False)
-
-        if not self.elevator.is_manual_mode():
-            # TODO update preset points
+        if (
+            True
+            # self.intakeMotor.get_position().value < -5
+        ):
             if self.operatorController.getRawButtonPressed(2):
                 self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
             if self.operatorController.getRawButtonReleased(2):
@@ -123,32 +122,24 @@ class Robot(MagicRobot):
             if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
                 self.elevator.x = max(
                     0,
-                    self.elevatorMotor.get_position().value - (x * 3 * EelevConst.dampen),
+                    self.elevatorMotor.get_position().value
+                    - (x * 3 * EelevConst.dampen),
                 )
             if util.value_changed("elevatorX", x) and x == 0:
-                self.elevator.x = self.elevatorMotor.get_position().value
-
-        else:
-            # Manual mode
-            self.elevator.set(
-                -self.operatorController.getRawAxis(5) * EelevConst.manualdampen
-                + (
-                    EelevConst.stay
-                    if self.elevatorMotor.get_position().value < 3
-                    else 0
-                )
-            )
+                self.elevator.x = self.elevatorMotor.get_position().value + x
 
         # INTAKE movements
         if self.operatorController.getRawButton(5):
             self.intake.intake()
         if self.operatorController.getRawButton(6):
             self.intake.eject()
-        if (self.operatorController.getRawAxis(2) >= 0.05) == True:
-            self.intake.set(IntakeConstants.PosOut)
-        else:
 
+        if self.operatorController.getRawAxis(2) >= 0.05:
+            self.intake.set(IntakeConstants.PosOut)
+        elif self.operatorController.getRawAxis(3) >= 0.3:
             self.intake.set(IntakeConstants.PosIn)
+        else:
+            self.intake.set(IntakeConstants.PosHome)
 
         # update robot pose based on AprilTags
         # if tid != -1:

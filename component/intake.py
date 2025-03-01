@@ -32,25 +32,22 @@ class Intake:
         self.goal_pos = setpoint
 
     def execute(self):
-        
+
         if self.intaking is not None:
             if self.intaking:
                 self.intakeMotor.set(Const.IntakeIntake)
             else:
                 self.intakeMotor.set(Const.IntakeEject * self.eject_dampen)
         else:
-            self.intakeMotor.set(0)  
+            self.intakeMotor.set(0)
 
-        #Don't move past PosOut position
-        print(self.posMotor.get_position().value, Const.PosOut)
+        # Don't move past PosOut position
+        # print(self.posMotor.get_position().value, Const.PosOut)
         current_position = self.posMotor.get_position().value
         pid_output = self.controller.calculate(current_position, self.goal_pos)
         # self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
         self.posMotor.set(Const.clamp(pid_output))
-    
+
     @feedback
     def pos(self) -> float:
         return self.posMotor.get_position().value
-        
-            
-        

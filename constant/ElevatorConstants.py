@@ -19,10 +19,9 @@ up = 0.5
 stay = 0.025
 down = 0.002
 
-deadzone = util.deadzone(0.01)
+deadzone = util.deadzone(0.05)
 dampen = 1
-manualdampen = 1
-clamp = util.clamp(0.6, -0.3)
+clamp = util.clamp(0.4, -0.3)
 
 config = phoenix6.configs.TalonFXConfiguration()
 config.motor_output.inverted = phoenix6.signals.InvertedValue.CLOCKWISE_POSITIVE
@@ -57,6 +56,6 @@ class Setpoint:
     HOME = 0
     SRC = 0
     TROUGH = 0
-    L1 = 30.3
-    L2 = 52.7
+    L1 = 17
+    L2 = 40
     L3 = 0

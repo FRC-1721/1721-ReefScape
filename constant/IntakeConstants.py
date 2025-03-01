@@ -31,7 +31,7 @@ FFController = wpimath.controller.ArmFeedforward(
     *(
         FF := [  # FeedForward
             kS := 0,  # Static friction feedforward
-            kG := 0,
+            kG := 3,
             kV := 0,  # Velocity feedforward
             kA := 0,  # Acceleration feedforward
         ]
@@ -42,10 +42,11 @@ PosDampen = 0.3
 clamp = util.clamp(0.5, -0.5)
 
 # In Out positions
-PosIn = 0
-PosOut = -24
+PosHome = -10
+PosIn = -5
+PosOut = -22
 
 # Intake/Eject speeds
 IntakeIntake = -0.2
-IntakeEject = 0.7
+IntakeEject = 0.3
 IntakeDampen = 1
