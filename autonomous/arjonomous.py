@@ -43,7 +43,7 @@ class ArjAuto(AutonomousStateMachine):
     @timed_state(duration=2, next_state="ardone")
     def arject(self):
         self.intake.set(IntakeConstants.PosOut)
-        self.intake.eject(0.3)
+        self.intake.eject(0.9)
 
     @state()
     def ardone(self):

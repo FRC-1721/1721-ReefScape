@@ -41,6 +41,10 @@ FFController = wpimath.controller.ArmFeedforward(
 PosDampen = 0.3
 clamp = util.clamp(0.5, -0.5)
 
+# custom position move controller
+PosRampFramesNumber = 10
+PosGoalThreshhold = 0.1
+
 # In Out positions
 PosHome = -10
 PosIn = -5

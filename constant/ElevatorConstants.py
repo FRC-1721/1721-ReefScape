@@ -32,7 +32,7 @@ Controller = wpimath.controller.PIDController(
         PID := [
             P := 0.050,
             I := 0.000,
-            D := 0.010,
+            D := 0.009,
         ]
     )
 )
@@ -41,7 +41,7 @@ FFController = wpimath.controller.ElevatorFeedforward(  # Feedforward
     *(
         FF := [
             kS := 0.00,  # Static friction feedforward
-            kG := 0.001,
+            kG := 0.004,
             kV := 0.00,  # Velocity feedforward
             kA := 0.000,  # Acceleration feedforward
         ]

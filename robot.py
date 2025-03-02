@@ -87,11 +87,11 @@ class Robot(MagicRobot):
 
         # if:
         dampen = 1
-        if self.elevator.get_position() > 5:
-            dampen = 0.3
+        if pos := self.elevator.get_position() > 5:
+            dampen -= max((pos - 5) / 15, 0.3)
         self.swerve.go(
-            -self.driveController.getRawAxis(1) * dampen,
-            -self.driveController.getRawAxis(0) * dampen,
+            self.driveController.getRawAxis(1) * dampen,
+            self.driveController.getRawAxis(0) * dampen,
             self.driveController.getRawAxis(4) * dampen,
             not self.driveController.getRawButton(5),  # field centric toggle
         )
@@ -126,7 +126,7 @@ class Robot(MagicRobot):
                     - (x * 3 * EelevConst.dampen),
                 )
             if util.value_changed("elevatorX", x) and x == 0:
-                self.elevator.x = self.elevatorMotor.get_position().value + x
+                self.elevator.x = self.elevator.get_position()
 
         # INTAKE movements
         if self.operatorController.getRawButton(5):
@@ -134,13 +134,19 @@ class Robot(MagicRobot):
         if self.operatorController.getRawButton(6):
             self.intake.eject()
 
-        # if self.operatorController.getRawAxis(2) >= 0.05:
-        #     self.intake.set(IntakeConstants.PosOut)
-        # elif self.operatorController.getRawAxis(3) >= 0.3:
-        #     self.intake.set(IntakeConstants.PosIn)
-        # else:
-        # self.intake.set(IntakeConstants.PosHome)
-        self.posMotor.set(self.operatorController.getRawAxis(1) * 0.3)
+        # # TODO clean this up
+        # if self.operatorController.getRawAxis(2) >= 0.1:
+        #     self.intake.goal(IntakeConstants.PosOut)
+        # elif self.operatorController.getRawAxis(3) >= 0.1:
+        #     self.intake.goal(IntakeConstants.PosIn)
+        # elif ????:
+        #     intake.goal(IntakeConstants.PosHome)
+
+        #     self.intake.set(IntakeConstants.clamp(x * IntakeConstants.PosDampen))
+
+        self.posMotor.set(
+            self.operatorController.getRawAxis(1) * IntakeConstants.PosDampen
+        )
 
         # update robot pose based on AprilTags
         # if tid != -1:
