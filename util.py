@@ -24,15 +24,23 @@ def value_changed(key: str, new_value) -> bool:
     return False
 
 
+# function that clamps between mn and mx
 def clamp(mn, mx):
     return lambda x: sorted((mn, mx, x))[1]
 
 
+# clamp between velocity and -velocity
 def maxvelocity(velocity):
     return clamp(velocity, -velocity)
 
 
-def maxproportional(v):  # i forgor
+# limits `y` to be at most `difference` from `x`
+def maxdistance(difference):
+    return lambda x, y: clamp(x + difference, x - difference)(y)
+
+
+# scale *args so all of *args is between v and -v
+def maxproportional(v):
     return lambda *args: tuple(
         map(lambda x, v=v: x * (v / max(map(abs, args + (1,)))), args)
     )
