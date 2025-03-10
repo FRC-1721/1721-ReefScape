@@ -68,7 +68,7 @@ class Robot(MagicRobot):
 
         # Intake Motors
         self.posMotor = IntakeConstants.PosMotorClass(*IntakeConstants.PosMotor)
-        self.posMotor.set_position(0)
+        self.posMotor.set_position(-29)
         self.intakeMotor = IntakeConstants.IntakeMotorClass(
             *IntakeConstants.IntakeMotor
         )
@@ -134,19 +134,19 @@ class Robot(MagicRobot):
         if self.operatorController.getRawButton(6):
             self.intake.eject()
 
-        # # TODO clean this up
-        # if self.operatorController.getRawAxis(2) >= 0.1:
-        #     self.intake.goal(IntakeConstants.PosOut)
-        # elif self.operatorController.getRawAxis(3) >= 0.1:
-        #     self.intake.goal(IntakeConstants.PosIn)
+        # TODO clean this up
+        if self.operatorController.getRawAxis(2) >= 0.1:
+            self.intake.set(IntakeConstants.PosOut)
+        elif self.operatorController.getRawAxis(3) >= 0.1:
+            self.intake.set(IntakeConstants.PosIn)
         # elif ????:
-        #     intake.goal(IntakeConstants.PosHome)
+        #    intake.goal(IntakeConstants.PosHome)
 
-        #     self.intake.set(IntakeConstants.clamp(x * IntakeConstants.PosDampen))
+        # self.intake.set(IntakeConstants.clamp(x * IntakeConstants.PosDampen))
 
-        self.posMotor.set(
-            self.operatorController.getRawAxis(1) * IntakeConstants.PosDampen
-        )
+        # self.posMotor.set(
+        #     self.operatorController.getRawAxis(1) * IntakeConstants.PosDampen
+        # )
 
         # update robot pose based on AprilTags
         # if tid != -1:

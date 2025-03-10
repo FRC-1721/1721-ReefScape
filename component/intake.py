@@ -18,16 +18,11 @@ class Intake:
 
     intaking = will_reset_to(None)
     eject_dampen = will_reset_to(Const.IntakeDampen)
-    x = will_reset_to(0)
     controller = Const.Controller
-    feed_forward = Const.FFController
+    feedforward = Const.FFController
 
     def __init__(self):
-        # custom position move controller
-        self.moving = False
-        self.goal_pos = 0
-        self.pos_frames = 0
-        self.pos_negative = False
+        self.x = -29
 
     def intake(self):
         self.intaking = True
@@ -39,12 +34,6 @@ class Intake:
     def set(self, value):
         self.moving = False
         self.x = value
-
-    def goal(self, setpoint):
-        self.moving = True
-        self.goal_pos = setpoint
-        self.pos_frames = 0
-        self.pos_negative = self.goal_pos < self.pos()
 
     def execute(self):
         if self.intaking is not None:
@@ -59,21 +48,22 @@ class Intake:
         # if self.pos() < Const.PosOut:
         #     self.posMotor.set((Const.PosOut - self.pos()) * 0.3)
 
-        # custom position move controller
-        # if self.moving:
-        #     distance = self.goal_pos - self.pos()
-        #     self.posMotor.set(
-        #         Const.PosDampen
-        #         * (-1 if self.pos_negative else 1)
-        #         * min(self.pos_frames / Const.PosRampFramesNumber, 1)  # initial ramp
-        #         * min(abs(distance) / Const.PosRampFramesNumber, 1)  # final ramp
-        #         + 0.3 * math.sin((util.clamp(0, 60)(-self.pos()) * math.pi) / 60)
-        #     )
-        #     self.pos_frames += 1
-        #     if distance * (-1 if self.pos_negative else 1) < Const.PosGoalThreshhold:
-        #         self.moving = False
-        # else:
-        #     self.posMotor.set(self.x)
+        current_position = self.pos()
+
+        pid_output = self.controller.calculate(current_position, self.x)
+        ff_output = self.feedforward.calculate(
+            current_position,
+            # (current_position) / 100 * (math.pi * 2),
+            self.posMotor.get_velocity().value,
+            # pid_output,
+        )  # Feedforward for motion control
+        # ff_output = 0
+
+        output = pid_output + ff_output
+        print(f"current POS:{self.pos()}, current x:{self.x}")
+        # Apply PID + FF control
+        # print(f"{output} --> {Const.clamp(output)}")
+        self.posMotor.set(Const.clamp(output))
 
     @feedback
     def pos(self) -> float:

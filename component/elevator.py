@@ -46,7 +46,6 @@ class Elevator:
         # if self.get_position() <= 0 and not self.elevatorLimit.get():
         #    self.elevatorMotor.set_position(5)
 
-        # TODO Use something other than the motor itself as the encoder
         current_position = self.elevatorMotor.get_position().value
 
         pid_output = self.controller.calculate(current_position, self.x)
