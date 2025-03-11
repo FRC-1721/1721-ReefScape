@@ -22,7 +22,7 @@ Controller = wpimath.controller.PIDController(
         PID := [
             P := 0.009,
             I := 0.0005,
-            D := 0.002,
+            D := 0.003,
         ]
     )
 )
@@ -42,9 +42,9 @@ PosDampen = 0.3
 clamp = util.clamp(0.5, -0.5)
 
 # In Out positions
-PosHome = -10
-PosIn = -5
-PosOut = -22
+PosHome = 3
+PosIn = 3
+PosOut = 20
 
 # Intake/Eject speeds
 IntakeIntake = -0.2

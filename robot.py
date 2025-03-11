@@ -68,7 +68,7 @@ class Robot(MagicRobot):
 
         # Intake Motors
         self.posMotor = IntakeConstants.PosMotorClass(*IntakeConstants.PosMotor)
-        self.posMotor.set_position(-29)
+        self.posMotor.set_position(0)
         self.intakeMotor = IntakeConstants.IntakeMotorClass(
             *IntakeConstants.IntakeMotor
         )
@@ -136,8 +136,10 @@ class Robot(MagicRobot):
 
         # TODO clean this up
         if self.operatorController.getRawAxis(2) >= 0.1:
+            print("raw axis 2: TRUE")
             self.intake.set(IntakeConstants.PosOut)
         elif self.operatorController.getRawAxis(3) >= 0.1:
+            print("raw axis 3: TRUE")
             self.intake.set(IntakeConstants.PosIn)
         # elif ????:
         #    intake.goal(IntakeConstants.PosHome)
