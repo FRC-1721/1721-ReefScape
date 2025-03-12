@@ -42,8 +42,8 @@ PosDampen = 0.3
 clamp = util.clamp(0.5, -0.5)
 
 # In Out positions
-PosHome = 3
-PosIn = 3
+PosHome = 2
+PosIn = 2
 PosOut = 20
 
 # Intake/Eject speeds
