@@ -16,30 +16,21 @@ IntakeMotor = [
     IntakeMotorCANBus := "intakebus",
 ]
 
-# haha im so silly
-Controller = wpimath.controller.PIDController(
-    *(
-        PID := [
-            P := 0.009,
-            I := 0.0005,
-            D := 0.003,
-        ]
-    )
-)
+PIDConfig = phoenix6.configs.Slot0Configs()
+PIDConfig.k_p = 1.3621
+PIDConfig.k_i = 0.1
+PIDConfig.k_d = 0.3
 
-FFController = wpimath.controller.ArmFeedforward(
-    *(
-        FF := [  # FeedForward
-            kS := 0,  # Static friction feedforward
-            kG := 3,
-            kV := 0,  # Velocity feedforward
-            kA := 0,  # Acceleration feedforward
-        ]
-    )
-)
+PIDRequest = phoenix6.controls.PositionVoltage(0).with_slot(0).with_feed_forward(0.2)
+
+
+def PIDControl(x):
+    return PIDRequest.with_position(x)
+
 
 PosDampen = 0.3
 clamp = util.clamp(0.5, -0.5)
+deadzone = util.deadzone(0.05)
 
 # In Out positions
 PosHome = 2

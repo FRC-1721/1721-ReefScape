@@ -65,10 +65,13 @@ class Robot(MagicRobot):
         )
         self.elevatorMotor.set_position(0)  # Reset Falcon's built-in encoder
         self.elevatorMotor.configurator.apply(EelevConst.config)
+        self.elevatorMotor.configurator.apply(EelevConst.PIDConfig)
 
         # Intake Motors
         self.posMotor = IntakeConstants.PosMotorClass(*IntakeConstants.PosMotor)
         self.posMotor.set_position(0)
+        self.posMotor.configurator.apply(IntakeConstants.PIDConfig)
+
         self.intakeMotor = IntakeConstants.IntakeMotorClass(
             *IntakeConstants.IntakeMotor
         )
@@ -100,33 +103,29 @@ class Robot(MagicRobot):
             self.swerve.tare_everything()
 
         # elevator movements
-        if (
-            True
-            # self.intakeMotor.get_position().value < -5
-        ):
-            if self.operatorController.getRawButtonPressed(2):
-                self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
-            if self.operatorController.getRawButtonReleased(2):
-                self.elevator.set(EelevConst.Setpoint.HOME)
+        if self.operatorController.getRawButtonPressed(2):
+            self.elevator.set(EelevConst.Setpoint.MIN_HEIGHT)
+        if self.operatorController.getRawButtonReleased(2):
+            self.elevator.set(EelevConst.Setpoint.HOME)
 
-            if self.operatorController.getRawButtonPressed(3):
-                self.elevator.set(EelevConst.Setpoint.L2)
-            if self.operatorController.getRawButtonReleased(3):
-                self.elevator.set(EelevConst.Setpoint.HOME)
+        if self.operatorController.getRawButtonPressed(3):
+            self.elevator.set(EelevConst.Setpoint.L2)
+        if self.operatorController.getRawButtonReleased(3):
+            self.elevator.set(EelevConst.Setpoint.HOME)
 
-            if self.operatorController.getRawButtonPressed(4):
-                self.elevator.set(EelevConst.Setpoint.L1)
-            if self.operatorController.getRawButtonReleased(4):
-                self.elevator.set(EelevConst.Setpoint.HOME)
+        if self.operatorController.getRawButtonPressed(4):
+            self.elevator.set(EelevConst.Setpoint.L1)
+        if self.operatorController.getRawButtonReleased(4):
+            self.elevator.set(EelevConst.Setpoint.HOME)
 
-            if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
-                self.elevator.x = max(
-                    0,
-                    self.elevatorMotor.get_position().value
-                    - (x * 3 * EelevConst.dampen),
-                )
-            if util.value_changed("elevatorX", x) and x == 0:
-                self.elevator.x = self.elevator.get_position()
+        # manual mode elevationizer
+        if (x := EelevConst.deadzone(self.operatorController.getRawAxis(5))) != 0:
+            self.elevator.x = max(
+                0,
+                self.elevatorMotor.get_position().value - (x * 3 * EelevConst.dampen),
+            )
+        if util.value_changed("elevatorX", x) and x == 0:
+            self.elevator.x = self.elevator.get_position()
 
         # INTAKE movements
         if self.operatorController.getRawButton(5):
@@ -138,9 +137,18 @@ class Robot(MagicRobot):
         if self.operatorController.getRawAxis(2) >= 0.1:
             print("raw axis 2: TRUE")
             self.intake.set(IntakeConstants.PosOut)
+            # self.posMotor.set_control(IntakeConstants.PIDControl(20))
+
         elif self.operatorController.getRawAxis(3) >= 0.1:
             print("raw axis 3: TRUE")
             self.intake.set(IntakeConstants.PosIn)
+            # self.posMotor.set_control(IntakeConstants.PIDControl(2))
+
+        if (x := IntakeConstants.deadzone(self.operatorController.getRawAxis(1))) != 0:
+            self.intake.x = self.intake.pos() - (x * 2)
+        if util.value_changed("intakeposX", x) and x == 0:
+            self.intake.x = self.intake.pos()
+
         # elif ????:
         #    intake.goal(IntakeConstants.PosHome)
 

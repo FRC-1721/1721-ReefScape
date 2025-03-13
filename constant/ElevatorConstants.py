@@ -27,26 +27,16 @@ config = phoenix6.configs.TalonFXConfiguration()
 config.motor_output.inverted = phoenix6.signals.InvertedValue.CLOCKWISE_POSITIVE
 config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 
-Controller = wpimath.controller.PIDController(
-    *(
-        PID := [
-            P := 0.050,
-            I := 0.000,
-            D := 0.009,
-        ]
-    )
-)
+PIDConfig = phoenix6.configs.Slot0Configs()
+PIDConfig.k_p = 1
+PIDConfig.k_i = 0.1
+PIDConfig.k_d = 0.25
 
-FFController = wpimath.controller.ElevatorFeedforward(  # Feedforward
-    *(
-        FF := [
-            kS := 0.00,  # Static friction feedforward
-            kG := 0.004,
-            kV := 0.00,  # Velocity feedforward
-            kA := 0.000,  # Acceleration feedforward
-        ]
-    )
-)
+PIDRequest = phoenix6.controls.PositionVoltage(0).with_slot(0).with_feed_forward(0.1)
+
+
+def PIDControl(x):
+    return PIDRequest.with_position(x)
 
 
 class Setpoint:

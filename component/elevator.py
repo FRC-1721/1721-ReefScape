@@ -19,9 +19,6 @@ class Elevator:
     elevatorMotor2: Const.MotorClass
     elevatorLimit: Const.LimitClass
 
-    controller = Const.Controller
-    feedforward = Const.FFController
-
     def __init__(self):
         # Flags
         self.x = Const.Setpoint.HOME
@@ -42,22 +39,8 @@ class Elevator:
         """
         Run control loop for the elevator.
         """
-        # if self.elevatorLimit.get(): self.elevatorMotor.set_position(0)
-        # if self.get_position() <= 0 and not self.elevatorLimit.get():
-        #    self.elevatorMotor.set_position(5)
 
-        current_position = self.elevatorMotor.get_position().value
-
-        pid_output = self.controller.calculate(current_position, self.x)
-        ff_output = self.feedforward.calculate(self.x)  # Feedforward for motion control
-        # ff_output = 0
-
-        output = pid_output + ff_output
-
-        # Apply PID + FF control
-        # print(f"{output} --> {Const.clamp(output)}")
-        if not (self.get_position() <= 0 and output <= 0):
-            self.elevatorMotor.set(Const.clamp(output))
+        self.elevatorMotor.set_control(Const.PIDControl(self.x))
 
     def threshhold(self, value, threshhold=5, dampen=0.3):
         return value * (1 if value <= threshhold else dampen)
