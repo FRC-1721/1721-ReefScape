@@ -46,6 +46,6 @@ class Setpoint:
     HOME = 0
     SRC = 0
     TROUGH = 0
-    L1 = 17
-    L2 = 40
+    L1 = 53
+    L2 = 37
     L3 = 0
