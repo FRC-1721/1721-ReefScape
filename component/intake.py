@@ -21,16 +21,21 @@ class Intake:
 
     def __init__(self):
         self.x = 0
+        self.holding = False
 
     def intake(self):
         self.intaking = True
+        self.holding = False
+
+    def hold(self):
+        self.holding = True
 
     def eject(self, dampen=Const.IntakeDampen):
         self.intaking = False
+        self.holding = False
         self.eject_dampen = dampen
 
     def set(self, value):
-        self.moving = False
         self.x = value
 
     def execute(self):
@@ -39,6 +44,8 @@ class Intake:
                 self.intakeMotor.set(Const.IntakeIntake)
             else:
                 self.intakeMotor.set(Const.IntakeEject * self.eject_dampen)
+        elif self.holding:
+            self.intakeMotor.set(Const.IntakeHold)
         else:
             self.intakeMotor.set(0)
 

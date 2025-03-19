@@ -132,6 +132,8 @@ class Robot(MagicRobot):
             self.intake.intake()
         if self.operatorController.getRawButton(6):
             self.intake.eject()
+        if self.operatorController.getRawButton(1):
+            self.intake.hold()
 
         # TODO clean this up
         if self.operatorController.getRawAxis(2) >= 0.1:
