@@ -28,7 +28,7 @@ class Intake:
         self.holding = False
 
     def hold(self):
-        self.holding = True
+        self.holding = not self.holding
 
     def eject(self, dampen=Const.IntakeDampen):
         self.intaking = False
@@ -40,12 +40,12 @@ class Intake:
 
     def execute(self):
         if self.intaking is not None:
+            if self.holding:
+                self.intakeMotor.set(Const.IntakeHold)
             if self.intaking:
                 self.intakeMotor.set(Const.IntakeIntake)
             else:
                 self.intakeMotor.set(Const.IntakeEject * self.eject_dampen)
-        elif self.holding:
-            self.intakeMotor.set(Const.IntakeHold)
         else:
             self.intakeMotor.set(0)
 
