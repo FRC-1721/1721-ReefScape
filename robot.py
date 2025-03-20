@@ -80,16 +80,6 @@ class Robot(MagicRobot):
         self.elevatorLimit = EelevConst.LimitClass(EelevConst.LimitID)
 
     def teleopPeriodic(self):
-        # tid = self.nt.getEntry("/limelight/tid").getDouble(-1)  # Current limelight target id
-
-        # if self.driveController.getRawButton(2):
-        #     self.swerve.target(
-        #         wpimath.geometry.Pose2d(
-        #             0, 0, wpimath.geometry.Rotation2d.fromDegrees(0)
-        #         )
-        #     )
-
-        # if:
         dampen = 1
         if pos := self.elevator.get_position() > 5:
             dampen -= max((pos - 5) / 15, 0.3)
@@ -151,3 +141,48 @@ class Robot(MagicRobot):
             self.intake.x = self.intake.pos() - (x * 2)
         if util.value_changed("intakeposX", x) and x == 0:
             self.intake.x = self.intake.pos()
+
+        # elif ????:
+        #    intake.goal(IntakeConstants.PosHome)
+
+        # self.intake.set(IntakeConstants.clamp(x * IntakeConstants.PosDampen))
+
+        # self.posMotor.set(
+        #     self.operatorController.getRawAxis(1) * IntakeConstants.PosDampen
+        # )
+
+        # You need to give the limelight the current yaw value in
+        # order for MegaTag2 to accurately estimate the robot pose
+        # There is supposed to be a function for this in limelightlib but
+        # it only exists in the Java library, so we have to do this manually
+        self.nt.getEntry("/limelight/robot_orientation_set").setDoubleArray(
+            # [self.swerve.get_state().pose.rotation().degrees(), 0, 0, 0, 0, 0]
+            [
+                self.gyro.getRotation2d().degrees(),
+                self.swerve.get_state().speeds.omega_dps,
+                0,
+                0,
+                0,
+                0,
+            ]
+        )
+        self.nt.flush()  # Give limelight the pose immediately (don't wait)
+
+        # update robot pose based on AprilTags
+        tid = self.nt.getEntry("/limelight/tid").getDouble(-1)
+        if tid != -1:
+            # we have to use botpose_orb_wpiblue cuz why not
+            pose = self.nt.getEntry("/limelight/botpose_orb_wpiblue").getDoubleArray(
+                [0 for i in range(25)]
+            )
+            self.swerve.add_vision_measurement(
+                wpimath.geometry.Pose2d(pose[0], pose[1], pose[5]),
+                phoenix6.utils.get_current_time_seconds()
+                - (pose[6] * 0.001),  # millis to sec
+            )
+
+        if (
+            self.driveController.getRawAxis(2) > 0.5
+            or self.driveController.getRawAxis(3) > 0.5
+        ):
+            self.swerve.brake()
