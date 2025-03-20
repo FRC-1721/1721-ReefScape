@@ -130,7 +130,7 @@ class Robot(MagicRobot):
             self.intake.intake()
         if self.operatorController.getRawButton(OperatorConstants.eject):
             self.intake.eject()
-        if self.operatorController.getRawButtonPressed(OperatorConstants.hold):
+        if self.operatorController.getRawButton(OperatorConstants.hold):
             self.intake.hold()
 
         # PID intake movement
@@ -186,7 +186,7 @@ class Robot(MagicRobot):
             self.swerve.add_vision_measurement(
                 wpimath.geometry.Pose2d(pose[0], pose[1], pose[5]),
                 phoenix6.utils.get_current_time_seconds()
-                - (pose[6] * 0.001),  # millis to sec
+                - (pose[6] * 0.001),  # pose[6] is latency
             )
 
         if (
