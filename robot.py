@@ -113,7 +113,11 @@ class Robot(MagicRobot):
             self.elevator.set(EelevConst.Setpoint.HOME)
 
         # manual mode elevationizer
-        if (x := EelevConst.deadzone(self.operatorController.getRawAxis(OperatorConstants.elevatorManualAxis))) != 0:
+        if (
+            x := EelevConst.deadzone(
+                self.operatorController.getRawAxis(OperatorConstants.elevatorManualAxis)
+            )
+        ) != 0:
             self.elevator.x = max(
                 0,
                 self.elevatorMotor.get_position().value - (x * 3 * EelevConst.dampen),
@@ -137,7 +141,11 @@ class Robot(MagicRobot):
             self.intake.set(IntakeConstants.PosIn)
 
         # manual intake movement
-        if (x := IntakeConstants.deadzone(self.operatorController.getRawAxis(OperatorConstants.intakeManualAxis))) != 0:
+        if (
+            x := IntakeConstants.deadzone(
+                self.operatorController.getRawAxis(OperatorConstants.intakeManualAxis)
+            )
+        ) != 0:
             self.intake.x = self.intake.pos() - (x * 2)
         if util.value_changed("intakeposX", x) and x == 0:
             self.intake.x = self.intake.pos()
