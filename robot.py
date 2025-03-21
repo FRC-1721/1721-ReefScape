@@ -9,7 +9,7 @@ import phoenix6
 from magicbot import MagicRobot
 from ntcore import NetworkTableInstance
 
-from constant import TunerConstants, DriveConstants, IntakeConstants
+from constant import TunerConstants, DriveConstants, IntakeConstants, ClimberConstants
 import constant.ElevatorConstants as EelevConst
 from constant.ControllerConstants import DriverConstants, OperatorConstants
 
@@ -17,6 +17,7 @@ from constant.ControllerConstants import DriverConstants, OperatorConstants
 from component.swerve import Swerve
 from component.elevator import Elevator
 from component.intake import Intake
+from component.climber import Climber
 
 import util
 
@@ -29,6 +30,7 @@ class Robot(MagicRobot):
     swerve: Swerve
     elevator: Elevator
     intake: Intake
+    climber: Climber
 
     def robotInit(self):
         super().robotInit()
@@ -78,6 +80,9 @@ class Robot(MagicRobot):
         )
 
         self.elevatorLimit = EelevConst.LimitClass(EelevConst.LimitID)
+
+        self.climbMotor = ClimberConstants.MotorClass(*ClimberConstants.Motor)
+        self.climbSolenoid = ClimberConstants.SolenoidClass(*ClimberConstants.Solenoid)
 
     def teleopPeriodic(self):
         dampen = 1
@@ -149,6 +154,20 @@ class Robot(MagicRobot):
             self.intake.x = self.intake.pos() - (x * 2)
         if util.value_changed("intakeposX", x) and x == 0:
             self.intake.x = self.intake.pos()
+
+        # climber movement
+        if self.operatorController.getPOV() == OperatorConstants.climb:
+            self.climber.climb()
+            # self.climbMotor.set(0.1)
+
+        if self.operatorController.getPOV() == OperatorConstants.unclimb:
+            self.climber.unclimb()
+            # self.climbMotor.set(-0.1)
+
+        if self.operatorController.getPOV() == 90:
+            self.climbSolenoid.set(True)
+        if self.operatorController.getPOV() == 270:
+            self.climbSolenoid.set(False)
 
         # elif ????:
         #    intake.goal(IntakeConstants.PosHome)

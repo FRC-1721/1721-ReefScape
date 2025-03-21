@@ -1,5 +1,6 @@
 from wpilib.interfaces import GenericHID
 
+
 class DriverConstants:
     # controller setup
     controller = GenericHID(0)
@@ -18,7 +19,7 @@ class DriverConstants:
     # button bindings
     fieldCentricToggle = 5
     tare = 7
-    brake = [2,3]
+    brake = [2, 3]
 
 
 class OperatorConstants:
@@ -39,4 +40,6 @@ class OperatorConstants:
     PosOut = 2
     PosIn = 3
     intakeManualAxis = 1
-    
+
+    climb = 0
+    unclimb = 180
