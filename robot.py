@@ -185,7 +185,7 @@ class Robot(MagicRobot):
         self.nt.getEntry("/limelight/robot_orientation_set").setDoubleArray(
             # [self.swerve.get_state().pose.rotation().degrees(), 0, 0, 0, 0, 0]
             [
-                self.gyro.getRotation2d().degrees(),
+                self.swerve.heading(),
                 self.swerve.get_state().speeds.omega_dps,
                 0,
                 0,
