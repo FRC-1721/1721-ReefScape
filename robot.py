@@ -2,6 +2,7 @@
 
 # Libs
 import logging
+import math
 import wpilib, wpimath, wpimath.geometry
 import phoenix6
 
@@ -98,6 +99,7 @@ class Robot(MagicRobot):
         # tare
         if self.driveController.getRawButton(DriverConstants.tare):
             self.swerve.tare_everything()
+            self.gyro.reset()
 
         # brake
         if (
@@ -203,7 +205,7 @@ class Robot(MagicRobot):
                 [0 for i in range(25)]
             )
             self.swerve.add_vision_measurement(
-                wpimath.geometry.Pose2d(pose[0], pose[1], pose[5]),
+                wpimath.geometry.Pose2d(pose[0], pose[1], pose[5] * (math.pi / 180)),
                 phoenix6.utils.get_current_time_seconds()
                 - (pose[6] * 0.001),  # pose[6] is latency
             )
