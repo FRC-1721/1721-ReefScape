@@ -105,7 +105,7 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     @feedback
     def pose(self) -> list[float]:
         pose = self.get_state().pose
-        return [pose.x, pose.y]
+        return [pose.X(), pose.Y(), pose.rotation().degrees()]
 
     @feedback
     def heading(self) -> float:
