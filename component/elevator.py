@@ -42,8 +42,10 @@ class Elevator:
 
         self.elevatorMotor.set_control(Const.PIDControl(self.x))
 
-        if not self.limit() and self.get_position() == 0:
-            self.elevatorMotor.set_position(5)
+        # # TODO fix this
+        # # keep going down if you think you're at zero and the limit is not pressed
+        # if not self.limit() and self.get_position() == 0:
+        #     self.elevatorMotor.set_position(5)
 
     def threshhold(self, value, threshhold=5, dampen=0.3):
         return value * (1 if value <= threshhold else dampen)
