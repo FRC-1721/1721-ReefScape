@@ -23,31 +23,22 @@ class Climber:
     def unclimb(self):
         self.is_climbing = False
 
-    def ratchet(self):
-        self.ratchet_engaged = True
-        self.climbSolenoid.set(False)
+    # def ratchet(self):
+    #     self.ratchet_engaged = True
+    #     self.climbSolenoid.set(False)
 
-    def free(self):
-        self.ratchet_engaged = False
-        self.climbSolenoid.set(True)
+    # def free(self):
+    #     self.ratchet_engaged = False
+    #     self.climbSolenoid.set(True)
 
     def execute(self):
         if self.climbing() is not None:
             if self.climbing():
-                if not self.ratcheted():
-                    self.ratchet()
-                    self.climbMotor.set(Const.FreeSpeed)
-                else:
-                    self.climbMotor.set(Const.ClimbSpeed)
+                self.climbMotor.set(Const.ClimbSpeed)
             else:
-                if self.ratcheted():
-                    self.free()
-                    self.climbMotor.set(Const.FreeSpeed)
-                else:
-                    self.climbMotor.set(Const.UnclimbSpeed)
+                self.climbMotor.set(Const.UnclimbSpeed)
         else:
             self.climbMotor.set(0)
-            self.ratchet()
 
     @feedback
     def climbing(self):

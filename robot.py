@@ -83,7 +83,6 @@ class Robot(MagicRobot):
         self.elevatorLimit = EelevConst.LimitClass(EelevConst.LimitID)
 
         self.climbMotor = ClimberConstants.MotorClass(*ClimberConstants.Motor)
-        self.climbSolenoid = ClimberConstants.SolenoidClass(*ClimberConstants.Solenoid)
 
     def teleopPeriodic(self):
         dampen = 1
@@ -171,11 +170,6 @@ class Robot(MagicRobot):
         if self.operatorController.getPOV() == OperatorConstants.unclimb:
             self.climber.unclimb()
             # self.climbMotor.set(-0.1)
-
-        if self.operatorController.getPOV() == 90:
-            self.climbSolenoid.set(True)
-        if self.operatorController.getPOV() == 270:
-            self.climbSolenoid.set(False)
 
         # elif ????:
         #    intake.goal(IntakeConstants.PosHome)
