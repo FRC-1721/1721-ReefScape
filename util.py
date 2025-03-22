@@ -1,5 +1,3 @@
-import math
-
 _value_cache = {}  # Dictionary to track previous values
 
 
