@@ -49,7 +49,9 @@ def maxproportional(v):
 
 
 def deadzone(zone):
-    return lambda x: 0 if abs(x) < zone else x
+    if not zone:
+        return lambda x: x
+    return lambda x: 0 if abs(x) < zone else x - zone * (x // abs(x))
 
 
 # squares positive and negative numbers
