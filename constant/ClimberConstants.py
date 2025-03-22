@@ -8,7 +8,7 @@ Motor = [MotorID := 32]
 SolenoidClass = wpilib.Solenoid
 Solenoid = [PCMID := 59, PCMType := wpilib.PneumaticsModuleType.CTREPCM, Channel := 4]
 
-ClimbSpeed = 0.3
-UnclimbSpeed = -0.3
+ClimbSpeed = 0.5
+UnclimbSpeed = -0.5
 
 FreeSpeed = 1

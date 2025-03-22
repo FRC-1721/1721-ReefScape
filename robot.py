@@ -89,10 +89,16 @@ class Robot(MagicRobot):
         dampen = 1
         if pos := self.elevator.get_position() > 5:
             dampen -= max((pos - 5) / 15, 0.3)
-        self.swerve.go(
+
+        speeds = [
             self.driveController.getRawAxis(DriverConstants.driveFD) * dampen,
             self.driveController.getRawAxis(DriverConstants.driveLR) * dampen,
             self.driveController.getRawAxis(DriverConstants.driveTR) * dampen,
+        ]
+        if self.driveController.getRawAxis(DriverConstants.driveLog):
+            speeds = list(map(math.log, speeds))
+        self.swerve.go(
+            *speeds,
             not self.driveController.getRawButton(5),  # field centric toggle
         )
 
@@ -127,7 +133,7 @@ class Robot(MagicRobot):
         ) != 0:
             self.elevator.x = max(
                 0,
-                self.elevatorMotor.get_position().value - (x * 3 * EelevConst.dampen),
+                self.elevatorMotor.get_position().value - (x * 5 * EelevConst.dampen),
             )
         if util.value_changed("elevatorX", x) and x == 0:
             self.elevator.x = self.elevator.get_position()
@@ -153,7 +159,7 @@ class Robot(MagicRobot):
                 self.operatorController.getRawAxis(OperatorConstants.intakeManualAxis)
             )
         ) != 0:
-            self.intake.x = self.intake.pos() - (x * 2)
+            self.intake.x = self.intake.pos() - (x * 4)
         if util.value_changed("intakeposX", x) and x == 0:
             self.intake.x = self.intake.pos()
 
