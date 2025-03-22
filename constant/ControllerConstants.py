@@ -16,6 +16,8 @@ class DriverConstants:
     driveLR = 0
     driveTR = 4
 
+    driveLog = 6
+
     # button bindings
     fieldCentricToggle = 5
     tare = 7
@@ -41,5 +43,5 @@ class OperatorConstants:
     PosIn = 3
     intakeManualAxis = 1
 
-    climb = 0
-    unclimb = 180
+    climb = 180
+    unclimb = 0
