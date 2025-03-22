@@ -111,15 +111,12 @@ class Robot(MagicRobot):
             self.gyro.reset()
 
         # elevator movements
-        if self.operatorController.getRawButtonPressed(OperatorConstants.l2):
-            self.elevator.set(EelevConst.Setpoint.L2)
-        if self.operatorController.getRawButtonReleased(OperatorConstants.l2):
+        if self.operatorController.getRawButtonPressed(OperatorConstants.home):
             self.elevator.set(EelevConst.Setpoint.HOME)
-
         if self.operatorController.getRawButtonPressed(OperatorConstants.l1):
             self.elevator.set(EelevConst.Setpoint.L1)
-        if self.operatorController.getRawButtonReleased(OperatorConstants.l1):
-            self.elevator.set(EelevConst.Setpoint.HOME)
+        if self.operatorController.getRawButtonPressed(OperatorConstants.l2):
+            self.elevator.set(EelevConst.Setpoint.L2)
 
         # manual mode elevationizer
         if (

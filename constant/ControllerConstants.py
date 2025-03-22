@@ -29,6 +29,7 @@ class OperatorConstants:
     controller = GenericHID(1)
 
     # elevator bindings
+    home = 2
     l2 = 3
     l1 = 4
     elevatorManualAxis = 5
