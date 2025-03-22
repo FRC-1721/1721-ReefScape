@@ -9,7 +9,6 @@ from magicbot import feedback, will_reset_to
 
 class Climber:
     climbMotor: Const.MotorClass
-    climbSolenoid: Const.SolenoidClass
     is_climbing = will_reset_to(None)
 
     def __init__(self):
@@ -23,14 +22,6 @@ class Climber:
     def unclimb(self):
         self.is_climbing = False
 
-    # def ratchet(self):
-    #     self.ratchet_engaged = True
-    #     self.climbSolenoid.set(False)
-
-    # def free(self):
-    #     self.ratchet_engaged = False
-    #     self.climbSolenoid.set(True)
-
     def execute(self):
         if self.climbing() is not None:
             if self.climbing():
@@ -43,7 +34,3 @@ class Climber:
     @feedback
     def climbing(self):
         return self.is_climbing
-
-    @feedback
-    def ratcheted(self):
-        return self.ratchet_engaged

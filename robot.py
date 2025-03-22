@@ -46,6 +46,8 @@ class Robot(MagicRobot):
         self.logger.info("Robot is initializing...")
 
     def createObjects(self):
+        wpilib.cameraserver.CameraServer().launch()
+
         # Controllers
         self.driveController = DriverConstants.controller
         self.operatorController = OperatorConstants.controller
