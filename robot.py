@@ -134,7 +134,7 @@ class Robot(MagicRobot):
         ) != 0:
             self.elevator.x = max(
                 0,
-                self.elevatorMotor.get_position().value - (x * 5 * EelevConst.dampen),
+                self.elevatorMotor.get_position().value - (x * 8 * EelevConst.dampen),
             )
         if util.value_changed("elevatorX", x) and x == 0:
             self.elevator.x = self.elevator.get_position()
@@ -160,7 +160,7 @@ class Robot(MagicRobot):
                 self.operatorController.getRawAxis(OperatorConstants.intakeManualAxis)
             )
         ) != 0:
-            self.intake.x = self.intake.pos() - (x * 4)
+            self.intake.x = self.intake.pos() - (x * 6)
         if util.value_changed("intakeposX", x) and x == 0:
             self.intake.x = self.intake.pos()
 
