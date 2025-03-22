@@ -1,3 +1,5 @@
+import math
+
 _value_cache = {}  # Dictionary to track previous values
 
 
@@ -48,3 +50,7 @@ def maxproportional(v):
 
 def deadzone(zone):
     return lambda x: 0 if abs(x) < zone else x
+
+
+def squaredampen(x):
+    return x * x * (x // abs(x)) if x else x

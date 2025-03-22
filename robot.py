@@ -96,8 +96,8 @@ class Robot(MagicRobot):
             self.driveController.getRawAxis(DriverConstants.driveLR) * dampen,
             self.driveController.getRawAxis(DriverConstants.driveTR) * dampen,
         ]
-        if self.driveController.getRawAxis(DriverConstants.driveLog):
-            speeds = list(map(math.log, speeds))
+        if self.driveController.getRawButton(DriverConstants.driveLog):
+            speeds = list(map(util.squaredampen, speeds))
         self.swerve.go(
             *speeds,
             not self.driveController.getRawButton(5),  # field centric toggle
@@ -128,8 +128,12 @@ class Robot(MagicRobot):
 
         # manual mode elevationizer
         if (
-            x := EelevConst.deadzone(
-                self.operatorController.getRawAxis(OperatorConstants.elevatorManualAxis)
+            x := util.squaredampen(
+                EelevConst.deadzone(
+                    self.operatorController.getRawAxis(
+                        OperatorConstants.elevatorManualAxis
+                    )
+                )
             )
         ) != 0:
             self.elevator.x = max(
@@ -156,8 +160,12 @@ class Robot(MagicRobot):
 
         # manual intake movement
         if (
-            x := IntakeConstants.deadzone(
-                self.operatorController.getRawAxis(OperatorConstants.intakeManualAxis)
+            x := util.squaredampen(
+                IntakeConstants.deadzone(
+                    self.operatorController.getRawAxis(
+                        OperatorConstants.intakeManualAxis
+                    )
+                )
             )
         ) != 0:
             self.intake.x = self.intake.pos() - (x * 6)
