@@ -4,17 +4,17 @@ import phoenix6
 import util
 
 
-Motor1ID = 14
-Motor2ID = 15
-LimitID = 0
-
 MotorClass = phoenix6.hardware.talon_fx.TalonFX
 LimitClass = DigitalInput
 
-# CAN Bus
-Motor1Canbus = "intakebus"
-Motor2Canbus = "intakebus"
-
+Motor1 = [
+    Motor1ID := 14,
+    Motor1Canbus := "intakebus",
+]
+Motor2 = [
+    Motor2ID := 15,
+    Motor2Canbus := "intakebus",
+]
 up = 0.5
 stay = 0.025
 down = 0.002

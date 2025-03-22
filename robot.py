@@ -59,16 +59,11 @@ class Robot(MagicRobot):
         self.nt = NetworkTableInstance.getDefault()
 
         # Motors - (Elevator Injection)
-        self.elevatorMotor = EelevConst.MotorClass(
-            EelevConst.Motor1ID, EelevConst.Motor1Canbus
-        )
-        self.elevatorMotor2 = EelevConst.MotorClass(
-            EelevConst.Motor2ID, EelevConst.Motor2Canbus
-        )
-        # Set motor2 to follow motor1
+        self.elevatorMotor = EelevConst.MotorClass(*EelevConst.Motor1)
+        self.elevatorMotor2 = EelevConst.MotorClass(*EelevConst.Motor2)
         self.elevatorMotor2.set_control(
             phoenix6.controls.follower.Follower(EelevConst.Motor1ID, False)
-        )
+        )  # motor2 follows motor1
         self.elevatorMotor.set_position(0)  # Reset Falcon's built-in encoder
         self.elevatorMotor.configurator.apply(EelevConst.config)
         self.elevatorMotor.configurator.apply(EelevConst.PIDConfig)

@@ -13,8 +13,6 @@ class Climber:
 
     def __init__(self):
         self.is_climbing = False
-        self.ratchet_engaged = True
-        self.timer = 10
 
     def climb(self):
         self.is_climbing = True

@@ -22,7 +22,6 @@ class Elevator:
     def __init__(self):
         # Flags
         self.x = Const.Setpoint.HOME
-        self._manual_mode = False  # Internal flag (default: False)
 
     def setup(self):
         """
@@ -57,11 +56,6 @@ class Elevator:
     @feedback
     def goal(self) -> float:
         return self.x
-
-    @feedback
-    def is_manual_mode(self) -> bool:
-        """Returns whether manual mode is currently enabled."""
-        return self._manual_mode
 
     @feedback
     def get_position(self) -> float:
