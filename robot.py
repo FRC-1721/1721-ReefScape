@@ -87,6 +87,7 @@ class Robot(MagicRobot):
         self.climbMotor = ClimberConstants.MotorClass(*ClimberConstants.Motor)
 
     def teleopPeriodic(self):
+        # dampen if elevator is up
         dampen = 1
         if pos := self.elevator.get_position() > 5:
             dampen -= max((pos - 5) / 15, 0.3)

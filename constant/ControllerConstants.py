@@ -16,7 +16,7 @@ class DriverConstants:
     driveLR = 0
     driveTR = 4
 
-    driveLog = 6
+    driveSlow = 6
 
     # button bindings
     fieldCentricToggle = 5

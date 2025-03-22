@@ -52,5 +52,6 @@ def deadzone(zone):
     return lambda x: 0 if abs(x) < zone else x
 
 
+# squares positive and negative numbers
 def squaredampen(x):
     return x * x * (x // abs(x)) if x else x
