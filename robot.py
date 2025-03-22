@@ -97,7 +97,8 @@ class Robot(MagicRobot):
             self.driveController.getRawAxis(DriverConstants.driveLR) * dampen,
             self.driveController.getRawAxis(DriverConstants.driveTR) * dampen,
         ]
-        if self.driveController.getRawButton(DriverConstants.driveLog):
+
+        if self.driveController.getRawButton(DriverConstants.driveSlow):
             speeds = list(map(util.squaredampen, speeds))
         self.swerve.go(
             *speeds,
@@ -108,13 +109,6 @@ class Robot(MagicRobot):
         if self.driveController.getRawButton(DriverConstants.tare):
             self.swerve.tare_everything()
             self.gyro.reset()
-
-        # brake
-        if (
-            self.driveController.getRawAxis(DriverConstants.brake[0]) > 0.5
-            or self.driveController.getRawAxis(DriverConstants.brake[1]) > 0.5
-        ):
-            self.swerve.brake()
 
         # elevator movements
         if self.operatorController.getRawButtonPressed(OperatorConstants.l2):
@@ -182,15 +176,6 @@ class Robot(MagicRobot):
             self.climber.unclimb()
             # self.climbMotor.set(-0.1)
 
-        # elif ????:
-        #    intake.goal(IntakeConstants.PosHome)
-
-        # self.intake.set(IntakeConstants.clamp(x * IntakeConstants.PosDampen))
-
-        # self.posMotor.set(
-        #     self.operatorController.getRawAxis(1) * IntakeConstants.PosDampen
-        # )
-
         # You need to give the limelight the current yaw value in
         # order for MegaTag2 to accurately estimate the robot pose
         # There is supposed to be a function for this in limelightlib but
@@ -221,8 +206,9 @@ class Robot(MagicRobot):
                 - (pose[6] * 0.001),  # pose[6] is latency
             )
 
+        # brake
         if (
-            self.driveController.getRawAxis(2) > 0.5
-            or self.driveController.getRawAxis(3) > 0.5
+            self.driveController.getRawAxis(DriverConstants.brake[0]) > 0.5
+            or self.driveController.getRawAxis(DriverConstants.brake[1]) > 0.5
         ):
             self.swerve.brake()
