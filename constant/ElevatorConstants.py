@@ -15,9 +15,7 @@ Motor2 = [
     Motor2ID := 15,
     Motor2Canbus := "intakebus",
 ]
-up = 0.5
-stay = 0.025
-down = 0.002
+LimitID = 0
 
 deadzone = util.deadzone(0.05)
 dampen = 1
