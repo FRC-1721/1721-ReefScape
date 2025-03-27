@@ -50,6 +50,11 @@ class Robot(MagicRobot):
     def createObjects(self):
         wpilib.cameraserver.CameraServer().launch()
 
+        self.is_red = (
+            lambda: wpilib.DriverStation.getAlliance()
+            == wpilib.DriverStation.Alliance.kRed
+        )
+
         # Controllers
         self.driveController = DriverConstants.controller
         self.operatorController = OperatorConstants.controller
@@ -110,6 +115,12 @@ class Robot(MagicRobot):
             *speeds,
             not self.driveController.getRawButton(5),  # field centric toggle
         )
+
+        if self.driveController.getRawButton(2):
+            self.swerve.goal_pose = self.swerve.get_state_copy().pose
+        if self.driveController.getRawButton(1):
+            if self.swerve.goal_pose:
+                self.swerve.target(self.swerve.goal)
 
         # tare
         if self.driveController.getRawButton(DriverConstants.tare):

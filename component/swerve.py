@@ -51,6 +51,8 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
                 "State", (), {**vars(_orig_get_state()), "pose": self.sim_pose}
             )()
             logging.warning("Swerve is running in sim mode!")
+        
+        self.goal_pose = wpimath.geometry.Pose2d(0, 0, 0)
 
     def go(self, x, y, z, field_centric=False):  # convenience
         self.request = (
@@ -77,6 +79,7 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
         velocity=0.5,
         facing=wpimath.geometry.Rotation2d(0),
     ):  # the formatter made this really tall
+        self.goal_pose = goal
         self.go(
             *self.controller.calculate(self.get_state().pose, goal, velocity, facing)
         )
@@ -110,6 +113,10 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     @feedback
     def heading(self) -> float:
         return self.gyro.getRotation2d().degrees()
+    
+    @feedback
+    def goal(self) -> list[float]:
+        return [self.goal_pose.X(), self.goal_pose.Y(), self.goal_pose.rotation().degrees()]
 
     # ran automatically (periodic)
     def execute(self):
