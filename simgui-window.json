@@ -18,7 +18,7 @@
   "Window": {
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
-      "Pos": "370,352",
+      "Pos": "305,203",
       "Size": "884,409"
     },
     "###FMS": {
@@ -28,7 +28,7 @@
     },
     "###Joysticks": {
       "Collapsed": "0",
-      "Pos": "5,764",
+      "Pos": "5,680",
       "Size": "796,155"
     },
     "###NetworkTables": {

@@ -3,6 +3,7 @@
 # Libs
 import logging
 import math
+import os
 import wpilib, wpimath, wpimath.geometry
 import phoenix6
 
@@ -21,6 +22,7 @@ from component.intake import Intake
 from component.climber import Climber
 
 import util
+import choreo
 
 # Sim
 # from physics import PhysicsEngine
@@ -76,6 +78,15 @@ class Robot(MagicRobot):
         self.intakeMotor = IntakeConstants.IntakeMotorClass(
             *IntakeConstants.IntakeMotor
         )
+        try:
+            # Latest version only needs this, but pypi doesn't have that
+            # version, so when it breaks you can use this line instead
+            # self.trajectory = choreo.load_swerve_trajectory("path1")
+            self.trajectory = choreo.load_swerve_trajectory(
+                os.path.join(wpilib.getDeployDirectory(), "choreo", "path2")
+            )
+        except ValueError:
+            self.trajectory = None
 
         self.elevatorLimit = EelevConst.LimitClass(EelevConst.LimitID)
 
