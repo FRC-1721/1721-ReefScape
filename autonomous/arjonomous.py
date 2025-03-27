@@ -15,7 +15,7 @@ from constant import IntakeConstants
 class ArjAuto(AutonomousStateMachine):
 
     MODE_NAME = "Arjominous Arjonomous"
-    DEFAULT = True
+    DEFAULT = False
     DISABLED = False
 
     # Components
