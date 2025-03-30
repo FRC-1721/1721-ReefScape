@@ -108,9 +108,10 @@ class Robot(MagicRobot):
             self.driveController.getRawAxis(DriverConstants.driveLR) * dampen,
             self.driveController.getRawAxis(DriverConstants.driveTR) * dampen,
         ]
+        speeds = list(map(util.squaredampen, speeds))
 
         if self.driveController.getRawButton(DriverConstants.driveSlow):
-            speeds = list(map(util.squaredampen, speeds))
+            speeds = list(map(lambda x: util.squaredampen(x) * 0.5, speeds))
         self.swerve.go(
             *speeds,
             not self.driveController.getRawButton(5),  # field centric toggle
