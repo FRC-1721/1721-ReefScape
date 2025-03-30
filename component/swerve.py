@@ -1,4 +1,5 @@
 import logging
+import math
 import wpilib
 import wpimath, wpimath.controller, wpimath.trajectory
 import phoenix6
@@ -17,13 +18,22 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     )  # default request if no request is given
 
     # TODO: Adjust PIDs?
-    controller = wpimath.controller.HolonomicDriveController(
-        wpimath.controller.PIDController(1, 0, 0),
-        wpimath.controller.PIDController(1, 0, 0),
-        wpimath.controller.ProfiledPIDControllerRadians(
-            1, 0, 0, wpimath.trajectory.TrapezoidProfileRadians.Constraints(6.28, 3.14)
-        ),
-    )
+    # xcontroller = wpimath.controller.ProfiledPIDController(
+    #     0.6, 0.2, 0.1, wpimath.trajectory.TrapezoidProfile.Constraints(0.5, 1), 0.01
+    # )
+    # ycontroller = wpimath.controller.ProfiledPIDController(
+    #     0.6, 0.2, 0.1, wpimath.trajectory.TrapezoidProfile.Constraints(0.5, 1), 0.01
+    # )
+    xcontroller = wpimath.controller.PIDController(0.6, 0.2, 0.1, 0.01)
+    ycontroller = wpimath.controller.PIDController(0.6, 0.2, 0.1, 0.01)
+    spinner = wpimath.controller.PIDController(0.8, 0.0, 0.0, 0.01)
+    # controller = HolonomicDriveController(
+    #     PIDController(1, 0, 0),
+    #     PIDController(1, 0, 0),
+    #     ProfiledPIDControllerRadians(
+    #         1, 0, 0, TrapezoidProfileRadians.Constraints(6.28, 3.14)
+    #     ),
+    # )
 
     def __init__(self):
         phoenix6.swerve.SwerveDrivetrain.__init__(
@@ -51,8 +61,18 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
                 "State", (), {**vars(_orig_get_state()), "pose": self.sim_pose}
             )()
             logging.warning("Swerve is running in sim mode!")
-        
+
         self.goal_pose = wpimath.geometry.Pose2d(0, 0, 0)
+        self.spinner.enableContinuousInput(-math.pi, math.pi)
+
+        self.resetControllers()
+
+        self.pid_info = "Not Started!"
+
+    def resetControllers(self):
+        self.xcontroller.reset()
+        self.ycontroller.reset()
+        self.spinner.reset()
 
     def go(self, x, y, z, field_centric=False):  # convenience
         self.request = (
@@ -76,13 +96,21 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     def target(
         self,
         goal: wpimath.geometry.Pose2d,
-        velocity=0.5,
         facing=wpimath.geometry.Rotation2d(0),
     ):  # the formatter made this really tall
-        self.goal_pose = goal
-        self.go(
-            *self.controller.calculate(self.get_state().pose, goal, velocity, facing)
+        pose = self.get_state().pose
+        x = self.xcontroller.calculate(pose.X(), self.goal_pose.X())
+        y = self.ycontroller.calculate(pose.Y(), self.goal_pose.Y())
+        r = -self.spinner.calculate(
+            wpimath.angleModulus(self.heading_radians()),
+            wpimath.angleModulus(self.goal_pose.rotation().radians()),
         )
+        self.pid_info = (
+            f"X: {pose.X()} -> {self.goal_pose.X()} -> {x}\n"
+            f"Y: {pose.Y()} -> {self.goal_pose.Y()} -> {y}\n"
+            f"R: {wpimath.angleModulus(self.heading_radians())} -> {wpimath.angleModulus(self.goal_pose.rotation().radians())} -> {r}\n"
+        )
+        self.go(x, y, r, field_centric=True)
 
     def brake(self):
         self.request = phoenix6.swerve.requests.SwerveDriveBrake()
@@ -96,7 +124,12 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     def set(self, request: phoenix6.swerve.requests.SwerveRequest):
         self.request = request
 
+    # ran automatically (periodic)
+    def execute(self):
+        self.set_control(self.request)
+
     # these values are pushed to NetworkTables
+
     @feedback
     def speed(self) -> list[float]:
         return list(map(lambda x: x.speed, self.get_state().module_targets))
@@ -113,11 +146,18 @@ class Swerve(phoenix6.swerve.SwerveDrivetrain):
     @feedback
     def heading(self) -> float:
         return self.gyro.getRotation2d().degrees()
-    
+
+    def heading_radians(self) -> float:
+        return self.gyro.getRotation2d().radians()
+
     @feedback
     def goal(self) -> list[float]:
-        return [self.goal_pose.X(), self.goal_pose.Y(), self.goal_pose.rotation().degrees()]
+        return [
+            self.goal_pose.X(),
+            self.goal_pose.Y(),
+            self.goal_pose.rotation().degrees(),
+        ]
 
-    # ran automatically (periodic)
-    def execute(self):
-        self.set_control(self.request)
+    @feedback
+    def pid(self) -> str:
+        return self.pid_info

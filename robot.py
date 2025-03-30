@@ -119,9 +119,11 @@ class Robot(MagicRobot):
 
         if self.driveController.getRawButton(2):
             self.swerve.goal_pose = self.swerve.get_state_copy().pose
+        if self.driveController.getRawButtonPressed(1):
+            self.swerve.resetControllers()
         if self.driveController.getRawButton(1):
             if self.swerve.goal_pose:
-                self.swerve.target(self.swerve.goal)
+                self.swerve.target(self.swerve.goal_pose)
 
         # tare
         if self.driveController.getRawButton(DriverConstants.tare):
