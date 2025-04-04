@@ -46,4 +46,4 @@ class Setpoint:
     TROUGH = 0
     L1 = 53
     L2 = 37
-    L3 = 0
+    L3 = 73.4

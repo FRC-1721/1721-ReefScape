@@ -32,6 +32,7 @@ class OperatorConstants:
     home = 2
     l2 = 3
     l1 = 4
+    maxHeight = 8
     elevatorManualAxis = 5
 
     # intake bindings

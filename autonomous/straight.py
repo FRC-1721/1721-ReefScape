@@ -34,7 +34,12 @@ class StraightAuto(AutonomousStateMachine):
         if distance_driven < 2.3:
             self.swerve.go(0.7, 0, 0, False)
         else:
-            self.next_state("ardone")
+            self.next_state("arout")
+
+    @state()
+    def arout(self):
+        self.intake.set(4.6)
+        self.next_state("ardone")
 
     @state()
     def ardone(self):

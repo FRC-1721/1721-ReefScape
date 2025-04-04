@@ -137,6 +137,8 @@ class Robot(MagicRobot):
             self.elevator.set(EelevConst.Setpoint.L1)
         if self.operatorController.getRawButtonPressed(OperatorConstants.l2):
             self.elevator.set(EelevConst.Setpoint.L2)
+        if self.operatorController.getRawButtonPressed(OperatorConstants.maxHeight):
+            self.elevator.set(EelevConst.Setpoint.L3)
 
         # manual mode elevationizer
         if (
