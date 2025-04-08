@@ -65,6 +65,30 @@ dev tools. Invoke the simulator with:
 make sim
 ```
 
+### Pushing Code
+
+Now obviously what good is code if you can't even push it to main for others to use? So, here are the 
+instructions for how to make commits, and push code to your branch.
+
+First, we use git add to get everything ready for the commit, use this if you want to add everything
+you've changed for the commit, if you only want to add specific things, contact us:
+
+```shell
+git add -A
+```
+
+Next, we use git commit to make an addition to the branch you're working on:
+
+```shell
+git commit -m "Enter your comment for the commit here, make sure to use quotes."
+```
+
+Finally, push it to your branch so others and access it:
+
+```shell
+git push
+```
+
 ### Other Notes
 
 Please assume-unchanged for local ds json config values. This will help prevent constantly overwriting 
