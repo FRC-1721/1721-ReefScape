@@ -31,7 +31,7 @@ class ArjAuto(AutonomousStateMachine):
     def armove(self, initial_call):
         distance_driven = self.swerve.pose()[0] - self.startx
 
-        if distance_driven < 1.0:
+        if distance_driven < 2.0:
             self.swerve.go(0.25, 0, 0, False)
         else:
             self.next_state("arjout")
