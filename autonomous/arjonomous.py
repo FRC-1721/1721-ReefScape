@@ -32,13 +32,18 @@ class ArjAuto(AutonomousStateMachine):
         distance_driven = self.swerve.pose()[0] - self.startx
 
         if distance_driven < 1.0:
-            self.swerve.go(0.5, 0, 0, False)
+            self.swerve.go(0.25, 0, 0, False)
         else:
             self.next_state("arjout")
 
     @state()
     def arjout(self):
-        self.intake.set(4.6)
+        self.intake.set(12.5)
+        self.next_state("arin")
+
+    @state()
+    def arin(self):
+        self.intake.set(4.5)
         self.next_state("ardone")
 
     @state()
