@@ -39,11 +39,6 @@ class ArjAuto(AutonomousStateMachine):
     @state()
     def arjout(self):
         self.intake.set(12.5)
-        self.next_state("arin")
-
-    @state()
-    def arin(self):
-        self.intake.set(4.5)
         self.next_state("ardone")
 
     @state()

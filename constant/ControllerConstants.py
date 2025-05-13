@@ -39,6 +39,7 @@ class OperatorConstants:
     intake = 5
     eject = 6
     hold = 1
+    ejectL4 = 7
 
     # intake movement bindings
     PosOut = 2

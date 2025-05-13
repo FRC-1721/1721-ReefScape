@@ -27,6 +27,9 @@ class Intake:
     def eject(self, dampen=1):
         self.motor_speed = Const.IntakeEject * dampen
 
+    def ejectl4(self, dampen=1):
+        self.motor_speed = Const.IntakeEjectL4 * dampen
+
     def hold(self, dampen=1):
         self.motor_speed = Const.IntakeHold * dampen
 

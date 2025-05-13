@@ -164,6 +164,8 @@ class Robot(MagicRobot):
             self.intake.eject()
         if self.operatorController.getRawButton(OperatorConstants.hold):
             self.intake.hold()
+        if self.operatorController.getRawButton(OperatorConstants.ejectL4):
+            self.intake.ejectl4()
 
         # PID intake movement
         if self.operatorController.getRawAxis(OperatorConstants.PosOut) >= 0.1:
