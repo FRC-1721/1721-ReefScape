@@ -132,13 +132,29 @@ class Robot(MagicRobot):
 
         # elevator movements
         if self.operatorController.getRawButtonPressed(OperatorConstants.home):
-            self.elevator.set(EelevConst.Setpoint.HOME)
+            if self.intake.pos < IntakeConstants.PosOut:
+                self.intake.x = IntakeConstants.PosOut
+                self.elevator.set(EelevConst.Setpoint.HOME)
+            else:
+                self.elevator.set(EelevConst.Setpoint.HOME)
         if self.operatorController.getRawButtonPressed(OperatorConstants.l1):
-            self.elevator.set(EelevConst.Setpoint.L1)
+            if self.intake.pos < IntakeConstants.PosOut:
+                self.intake.x = IntakeConstants.PosOut
+                self.elevator.set(EelevConst.Setpoint.L1)
+            else:
+                self.elevator.set(EelevConst.Setpoint.L1)
         if self.operatorController.getRawButtonPressed(OperatorConstants.l2):
-            self.elevator.set(EelevConst.Setpoint.L2)
+            if self.intake.pos < IntakeConstants.PosOut:
+                self.intake.x = IntakeConstants.PosOut
+                self.elevator.set(EelevConst.Setpoint.L2)
+            else:
+                self.elevator.set(EelevConst.Setpoint.L2)
         if self.operatorController.getRawButtonPressed(OperatorConstants.maxHeight):
-            self.elevator.set(EelevConst.Setpoint.L3)
+            if self.intake.pos < IntakeConstants.PosOut:
+                self.intake.x = IntakeConstants.PosOut
+                self.elevator.set(EelevConst.Setpoint.L3)
+            else:
+                self.elevator.set(EelevConst.Setpoint.L3)
 
         # manual mode elevationizer
         if (
@@ -158,21 +174,27 @@ class Robot(MagicRobot):
             self.elevator.x = self.elevator.get_position()
 
         # INTAKE actions
-        if self.operatorController.getRawButton(OperatorConstants.intake):
-            self.intake.intake()
+        if self.operatorController.getRawButtonPressed(OperatorConstants.intake):
+            if self.intake.intaking == 0:
+                self.intake.intake()
+            else:
+                self.intake.idle()
         if self.operatorController.getRawButton(OperatorConstants.eject):
             self.intake.eject()
-        if self.operatorController.getRawButton(OperatorConstants.hold):
-            self.intake.hold()
+        if self.operatorController.getRawButtonPressed(OperatorConstants.hold):
+            if self.intake.intaking == 0:
+                self.intake.hold()
+            else:
+                self.intake.idle()
         if self.operatorController.getRawButton(OperatorConstants.ejectL4):
             self.intake.ejectl4()
 
         # PID intake movement
         if self.operatorController.getRawAxis(OperatorConstants.PosOut) >= 0.1:
-            self.intake.set(IntakeConstants.PosOut)
+            self.intake.x = IntakeConstants.PosOut
 
         elif self.operatorController.getRawAxis(OperatorConstants.PosIn) >= 0.1:
-            self.intake.set(IntakeConstants.PosIn)
+            self.intake.x = IntakeConstants.PosIn
 
         # manual intake movement
         if (

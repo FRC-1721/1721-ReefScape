@@ -27,6 +27,9 @@ class Intake:
     def eject(self, dampen=1):
         self.motor_speed = Const.IntakeEject * dampen
 
+    def idle(self, dampen=1):
+        self.motor_speed = Const.Idle * dampen
+
     def ejectl4(self, dampen=1):
         self.motor_speed = Const.IntakeEjectL4 * dampen
 
@@ -43,3 +46,5 @@ class Intake:
     @feedback
     def pos(self) -> float:
         return self.posMotor.get_position().value
+    def intaking(self) -> bool:
+        return self.intakeMotor.get_applied_rotor_polarity().value

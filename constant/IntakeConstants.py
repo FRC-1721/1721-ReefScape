@@ -39,6 +39,7 @@ PosOut = 22
 
 # Intake/Eject speeds
 IntakeIntake = -0.2
+Idle = 0
 IntakeEject = 0.3
 IntakeEjectL4 = 0.15
 IntakeHold = 0.08  # TODO mod to not be guess
