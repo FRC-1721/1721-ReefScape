@@ -46,5 +46,5 @@ class Intake:
     @feedback
     def pos(self) -> float:
         return self.posMotor.get_position().value
-    def intaking(self) -> bool:
-        return self.intakeMotor.get_applied_rotor_polarity().value
+    def intaking(self) -> float:
+        return self.intakeMotor.get().value
