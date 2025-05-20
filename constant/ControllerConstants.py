@@ -36,15 +36,16 @@ class OperatorConstants:
     elevatorManualAxis = 5
 
     # intake bindings
-    intake = 5
+    botmodetoggle = 5
     eject = 6
     hold = 1
     ejectL4 = 7
 
     # intake movement bindings
     PosOut = 2
-    PosIn = 3
+    PosIn = 3 
     intakeManualAxis = 1
 
     climb = 180
+    mode_switch = 90
     unclimb = 0

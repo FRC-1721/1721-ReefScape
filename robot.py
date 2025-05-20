@@ -98,6 +98,9 @@ class Robot(MagicRobot):
         self.climbMotor = ClimberConstants.MotorClass(*ClimberConstants.Motor)
 
     def teleopPeriodic(self):
+        main_mode = 0
+        bot_mode = 0
+
         # dampen if elevator is up
         dampen = 1
         if pos := self.elevator.get_position() > 5:
@@ -174,6 +177,15 @@ class Robot(MagicRobot):
             self.elevator.x = self.elevator.get_position()
 
         # INTAKE actions
+
+        # main controller vs manual controller
+        if self.operatorController.getPOV(OperatorConstants.mode_switch):
+            main_mode += 1
+
+        # algae bot vs coral bot
+        if self.operatorController.getRawButtonPressed(OperatorConstants.botmodetoggle):
+            bot_mode += 1
+        
         if self.operatorController.getRawButtonPressed(OperatorConstants.intake):
             if self.intake.intaking < 0:
                 self.intake.idle()
