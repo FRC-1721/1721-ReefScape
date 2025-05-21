@@ -17,6 +17,7 @@
     "windows": {
       "/SmartDashboard/Field": {
         "bottom": 1638,
+        "builtin": "2025 Reefscape",
         "height": 8.051901817321777,
         "left": 534,
         "right": 3466,
@@ -25,16 +26,6 @@
         "window": {
           "visible": true
         }
-      }
-    }
-  },
-  "NetworkTables": {
-    "transitory": {
-      "components": {
-        "elevator": {
-          "open": true
-        },
-        "open": true
       }
     }
   },
