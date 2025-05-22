@@ -132,25 +132,25 @@ class Robot(MagicRobot):
 
         # elevator movements
         if self.operatorController.getRawButtonPressed(OperatorConstants.home):
-            if self.intake.pos < IntakeConstants.PosOut:
+            if self.intake.pos() < IntakeConstants.PosOut:
                 self.intake.x = IntakeConstants.PosOut
                 self.elevator.set(EelevConst.Setpoint.HOME)
             else:
                 self.elevator.set(EelevConst.Setpoint.HOME)
         if self.operatorController.getRawButtonPressed(OperatorConstants.l1):
-            if self.intake.pos < IntakeConstants.PosOut:
+            if self.intake.pos() < IntakeConstants.PosOut:
                 self.intake.x = IntakeConstants.PosOut
                 self.elevator.set(EelevConst.Setpoint.L1)
             else:
                 self.elevator.set(EelevConst.Setpoint.L1)
         if self.operatorController.getRawButtonPressed(OperatorConstants.l2):
-            if self.intake.pos < IntakeConstants.PosOut:
+            if self.intake.pos() < IntakeConstants.PosOut:
                 self.intake.x = IntakeConstants.PosOut
                 self.elevator.set(EelevConst.Setpoint.L2)
             else:
                 self.elevator.set(EelevConst.Setpoint.L2)
         if self.operatorController.getRawButtonPressed(OperatorConstants.maxHeight):
-            if self.intake.pos < IntakeConstants.PosOut:
+            if self.intake.pos() < IntakeConstants.PosOut:
                 self.intake.x = IntakeConstants.PosOut
                 self.elevator.set(EelevConst.Setpoint.L3)
             else:
@@ -174,10 +174,12 @@ class Robot(MagicRobot):
             self.elevator.x = self.elevator.get_position()
 
         # INTAKE acitons
-        if self.operatorController.getRawButtonPressed(5):
+        if self.operatorController.getRawButtonPressed(OperatorConstants.intake):
             self.intake.intake_coral()
         if self.operatorController.getRawButton(OperatorConstants.eject):
             self.intake.intake_algae()
+        if self.operatorController.getRawButton(OperatorConstants.ejectL4):
+            self.intake.intake_algae(True)
 
         # PID intake movement
         if self.operatorController.getRawAxis(OperatorConstants.PosOut) >= 0.1:

@@ -26,8 +26,10 @@ class Intake:
     def intake_coral(self):
         self.coral_intaking = not self.coral_intaking
 
-    def intake_algae(self):
-        self.algae_intaking = 1
+    def intake_algae(self, slow=False):
+        self.algae_intaking = (
+            Const.IntakeEjectCoral if slow else Const.IntakeIntakeAlgae
+        )
 
     # for intake position
     def set(self, value):
@@ -35,7 +37,7 @@ class Intake:
 
     def execute(self):
         if self.algae_intaking:
-            self.intakeMotor.set(Const.IntakeIntakeAlgae)
+            self.intakeMotor.set(self.algae_intaking)
         elif self.coral_intaking:
             self.intakeMotor.set(Const.IntakeIntakeCoral)
         else:
