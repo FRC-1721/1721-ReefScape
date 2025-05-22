@@ -21,6 +21,10 @@ def mock_motor():
             # Simulating a StatusSignal object that has a .value property
             return type("MockStatusSignal", (), {"value": 2.0})()
 
+        def set_control(self, mode):
+            # Extract the position from the PID control request and set it as output
+            self.output = mode.position
+
     return MockMotor()
 
 

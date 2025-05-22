@@ -17,14 +17,11 @@ class Elevator:
     # Hardware
     elevatorMotor: Const.MotorClass
     elevatorMotor2: Const.MotorClass
-
-    controller = Const.Controller
-    feedforward = Const.FFController
+    elevatorLimit: Const.LimitClass
 
     def __init__(self):
         # Flags
         self.x = Const.Setpoint.HOME
-        self._manual_mode = False  # Internal flag (default: False)
 
     def setup(self):
         """
@@ -37,51 +34,28 @@ class Elevator:
         """Set the target position for the elevator."""
         self.x = goal
 
-    def set_manual_mode(self, enabled: bool):
-        """
-        Enables or disables manual mode.
-        :param enabled: True to enable manual mode, False to disable.
-        """
-        if util.value_changed("elevator_manual_mode", enabled):
-            logging.info(f"Elevator manual mode {'ENABLED' if enabled else 'DISABLED'}")
-            print(f"Elevator manual mode {'ENABLED' if enabled else 'DISABLED'}")
-            if not enabled:
-                self.x = self.get_position()
-        self._manual_mode = enabled
-
     def execute(self):
         """
         Run control loop for the elevator.
         """
 
-        # TODO Use something other than the motor itself as the encoder
-        current_position = self.elevatorMotor.get_position().value
+        self.elevatorMotor.set_control(Const.PIDControl(self.x))
 
-        pid_output = self.controller.calculate(current_position, self.x)
-        ff_output = self.feedforward.calculate(self.x)  # Feedforward for motion control
-        # ff_output = 0
+        # # TODO fix this
+        # # keep going down if you think you're at zero and the limit is not pressed
+        # if not self.limit() and self.get_position() == 0:
+        #     self.elevatorMotor.set_position(5)
 
-        output = pid_output + ff_output
+    def threshhold(self, value, threshhold=5, dampen=0.3):
+        return value * (1 if value <= threshhold else dampen)
 
-        if not self._manual_mode:
-            # Apply PID + FF control
-            # print(f"{output} --> {Const.clamp(output)}")
-            self.elevatorMotor.set(Const.clamp(output))
-        else:
-            # Manually override to direct control
-            self.elevatorMotor.set(self.x)
-
-    def isReady(self, offset=0.1):
-        return abs(self.get_position() - self.x) < offset
+    @feedback()
+    def limit(self) -> bool:
+        return self.elevatorLimit.get()
 
     @feedback
     def goal(self) -> float:
         return self.x
-
-    @feedback
-    def is_manual_mode(self) -> bool:
-        """Returns whether manual mode is currently enabled."""
-        return self._manual_mode
 
     @feedback
     def get_position(self) -> float:

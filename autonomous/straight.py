@@ -12,9 +12,9 @@ from constant import IntakeConstants
 # quick template for making autos
 
 
-class ArjAuto(AutonomousStateMachine):
+class StraightAuto(AutonomousStateMachine):
 
-    MODE_NAME = "Arjominous Arjonomous"
+    MODE_NAME = "Go Straight"
     DEFAULT = False
     DISABLED = False
 
@@ -31,13 +31,13 @@ class ArjAuto(AutonomousStateMachine):
     def armove(self, initial_call):
         distance_driven = self.swerve.pose()[0] - self.startx
 
-        if distance_driven < 1.0:
-            self.swerve.go(0.5, 0, 0, False)
+        if distance_driven < 2.3:
+            self.swerve.go(0.7, 0, 0, False)
         else:
-            self.next_state("arjout")
+            self.next_state("arout")
 
     @state()
-    def arjout(self):
+    def arout(self):
         self.intake.set(4.6)
         self.next_state("ardone")
 

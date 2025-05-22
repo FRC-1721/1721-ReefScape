@@ -1,3 +1,5 @@
+import math
+
 import util
 import constant.IntakeConstants as Const
 
@@ -14,37 +16,27 @@ class Intake:
     posMotor: Const.PosMotorClass
     intakeMotor: Const.IntakeMotorClass
 
-    intaking = will_reset_to(None)
-    # goal_pos = Const.PosIn
-    eject_dampen = will_reset_to(Const.IntakeDampen)
-    goal_pos = will_reset_to(0)
-    controller = Const.Controller
-    feed_forward = Const.FFController
+    motor_speed = will_reset_to(0)
 
-    def intake(self):
-        self.intaking = True
+    def __init__(self):
+        self.x = 0
 
-    def eject(self, dampen=Const.IntakeDampen):
-        self.intaking = False
-        self.eject_dampen = dampen
+    def intake(self, dampen=1):
+        self.motor_speed = Const.IntakeIntake * dampen
 
-    def set(self, setpoint):
-        self.goal_pos = setpoint
+    def eject(self, dampen=1):
+        self.motor_speed = Const.IntakeEject * dampen
 
-    def isReady(self, desiredPOS):
-        if round(self.posMotor.get_position()) == desiredPOS:
-            return True
+    def hold(self, dampen=1):
+        self.motor_speed = Const.IntakeHold * dampen
+
+    def set(self, value):
+        self.x = value
 
     def execute(self):
-        if self.intaking is not None:
-            if self.intaking:
-                self.intakeMotor.set(Const.IntakeIntake)
-            else:
-                self.intakeMotor.set(Const.IntakeEject * self.eject_dampen)
-        else:
-            self.intakeMotor.set(0)
+        self.intakeMotor.set(self.motor_speed)
+        self.posMotor.set_control(Const.PIDControl(self.x))
 
-        # self.posMotor.set(Const.clamp(self.goal_pos * Const.PosDampen))
-        current_position = self.posMotor.get_position().value
-        pid_output = self.controller.calculate(current_position, self.goal_pos)
-        self.posMotor.set(Const.clamp(pid_output))
+    @feedback
+    def pos(self) -> float:
+        return self.posMotor.get_position().value
