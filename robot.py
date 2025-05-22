@@ -175,14 +175,14 @@ class Robot(MagicRobot):
 
         # INTAKE actions
         if self.operatorController.getRawButtonPressed(OperatorConstants.intake):
-            if self.intake.intaking < 0:
+            if self.intake.intaking() < 0:
                 self.intake.idle()
             else:
                 self.intake.intake()
         if self.operatorController.getRawButton(OperatorConstants.eject):
             self.intake.eject()
         if self.operatorController.getRawButtonPressed(OperatorConstants.hold):
-            if self.intake.intaking < 0:
+            if self.intake.intaking() < 0:
                 self.intake.idle()
             else:
                 self.intake.hold()

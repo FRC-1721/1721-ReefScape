@@ -46,5 +46,7 @@ class Intake:
     @feedback
     def pos(self) -> float:
         return self.posMotor.get_position().value
+    
+    @feedback
     def intaking(self) -> float:
         return self.intakeMotor.getVelocity().value
