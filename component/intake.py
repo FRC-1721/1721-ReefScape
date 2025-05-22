@@ -33,10 +33,6 @@ class Intake:
     def set(self, value):
         self.x = value
 
-    def isReady(self, desiredPOS):
-        if round(self.posMotor.get_position()) == desiredPOS:
-            return True
-
     def execute(self):
         self.intakeMotor.set(self.motor_speed)
         self.posMotor.set_control(Const.PIDControl(self.x))
