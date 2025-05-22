@@ -21,6 +21,9 @@ from component.elevator import Elevator
 from component.intake import Intake
 from component.climber import Climber
 
+# High Level Components
+from component.elevatorControl import ElevatorControl
+
 import util
 import choreo
 
@@ -29,11 +32,16 @@ import choreo
 
 
 class Robot(MagicRobot):
+    # high level components should go first
+    elevator_control: ElevatorControl
 
+    # components
     swerve: Swerve
     elevator: Elevator
     intake: Intake
     climber: Climber
+
+    # state machines
 
     def robotInit(self):
         super().robotInit()

@@ -53,6 +53,9 @@ class Elevator:
     def limit(self) -> bool:
         return self.elevatorLimit.get()
 
+    def isReady(self, offset=0.1):
+        return abs(self.get_position() - self.x) < offset
+
     @feedback
     def goal(self) -> float:
         return self.x
