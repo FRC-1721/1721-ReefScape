@@ -74,6 +74,12 @@ First, we use git add to get everything ready for the commit, use this if you wa
 you've changed for the commit, if you only want to add specific things, contact us:
 
 ```shell
+git add <your file>
+```
+
+Or, add all files. (Please be thoughtful you dont add things you dont intend to! Check with a quick `git status` before pushing.
+
+```shell
 git add -A
 ```
 
