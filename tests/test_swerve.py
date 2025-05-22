@@ -35,7 +35,7 @@ def test_real_pose_feedback(swerve):
 
     pose = Pose2d(2.0, 3.0, Rotation2d.fromDegrees(45))
     swerve.get_state = lambda: type("State", (), {"pose": pose})()  # Mock get_state
-    assert swerve.pose() == [pose.x, pose.y]
+    assert swerve.pose() == [pose.X(), pose.Y(), pose.rotation().degrees()]
 
 
 def test_sim_pose_feedback(swerve):
@@ -47,4 +47,4 @@ def test_sim_pose_feedback(swerve):
 
     pose = Pose2d(2.0, 3.0, Rotation2d.fromDegrees(45))
     swerve.sim_pose = pose
-    assert swerve.pose() == [pose.x, pose.y]
+    assert swerve.pose() == [pose.X(), pose.Y(), pose.rotation().degrees()]
