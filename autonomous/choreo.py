@@ -43,7 +43,7 @@ class ChoreoAuto(AutonomousStateMachine):
 
         sample = self.trajectory.sample_at(state_tm, self.is_red())
         if sample:
-            self.swerve.trajectory(sample)
+            self.swerve.target(sample)
         else:
             print("no sample?", sample)
 
