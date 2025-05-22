@@ -22,7 +22,8 @@ def mock_motor():
             return type("MockStatusSignal", (), {"value": 2.0})()
 
         def set_control(self, mode):
-            pass
+            # Extract the position from the PID control request and set it as output
+            self.output = mode.position
 
     return MockMotor()
 
