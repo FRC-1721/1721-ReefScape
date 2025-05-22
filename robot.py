@@ -173,21 +173,11 @@ class Robot(MagicRobot):
         if util.value_changed("elevatorX", x) and x == 0:
             self.elevator.x = self.elevator.get_position()
 
-        # INTAKE actions
-        if self.operatorController.getRawButtonPressed(OperatorConstants.intake):
-            if self.intake.intaking() < 0:
-                self.intake.idle()
-            else:
-                self.intake.intake()
+        # INTAKE acitons
+        if self.operatorController.getRawButtonPressed(5):
+            self.intake.intake_coral()
         if self.operatorController.getRawButton(OperatorConstants.eject):
-            self.intake.eject()
-        if self.operatorController.getRawButtonPressed(OperatorConstants.hold):
-            if self.intake.intaking() < 0:
-                self.intake.idle()
-            else:
-                self.intake.hold()
-        if self.operatorController.getRawButton(OperatorConstants.ejectL4):
-            self.intake.ejectl4()
+            self.intake.intake_algae()
 
         # PID intake movement
         if self.operatorController.getRawAxis(OperatorConstants.PosOut) >= 0.1:

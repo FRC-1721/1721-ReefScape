@@ -16,37 +16,37 @@ class Intake:
     posMotor: Const.PosMotorClass
     intakeMotor: Const.IntakeMotorClass
 
-    motor_speed = will_reset_to(0)
+    algae_intaking = will_reset_to(0)
 
     def __init__(self):
         self.x = 0
 
-    def intake(self, dampen=1):
-        self.motor_speed = Const.IntakeIntake * dampen
+        self.coral_intaking = False
 
-    def eject(self, dampen=1):
-        self.motor_speed = Const.IntakeEject * dampen
+    def intake_coral(self):
+        self.coral_intaking = not self.coral_intaking
 
-    def idle(self, dampen=1):
-        self.motor_speed = Const.Idle * dampen
+    def intake_algae(self):
+        self.algae_intaking = 1
 
-    def ejectl4(self, dampen=1):
-        self.motor_speed = Const.IntakeEjectL4 * dampen
-
-    def hold(self, dampen=1):
-        self.motor_speed = Const.IntakeHold * dampen
-
+    # for intake position
     def set(self, value):
         self.x = value
 
     def execute(self):
-        self.intakeMotor.set(self.motor_speed)
+        if self.algae_intaking:
+            self.intakeMotor.set(Const.IntakeIntakeAlgae)
+        elif self.coral_intaking:
+            self.intakeMotor.set(Const.IntakeIntakeCoral)
+        else:
+            self.intakeMotor.set(0)
+
         self.posMotor.set_control(Const.PIDControl(self.x))
 
     @feedback
     def pos(self) -> float:
         return self.posMotor.get_position().value
-    
+
     @feedback
     def intaking(self) -> float:
-        return self.intakeMotor.getVelocity().value
+        return self.intakeMotor.get_velocity().value

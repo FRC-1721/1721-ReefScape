@@ -38,8 +38,9 @@ PosIn = 5
 PosOut = 22
 
 # Intake/Eject speeds
-IntakeIntake = -0.2
 Idle = 0
-IntakeEject = 0.3
-IntakeEjectL4 = 0.15
-IntakeHold = 0.08  # TODO mod to not be guess
+IntakeEjectAlgae = 0.3
+IntakeEjectCoral = -0.15
+IntakeIntakeAlgae = -0.2
+IntakeIntakeCoral = 0.3
+IntakeHoldAlgae = 0.08  # TODO mod to not be guess
