@@ -36,6 +36,7 @@ deadzone = util.deadzone(0.05)
 PosHome = 2
 PosIn = 5
 PosOut = 18
+PosL4 = 11.35
 
 # Intake/Eject speeds
 Idle = 0

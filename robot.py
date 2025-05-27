@@ -151,7 +151,7 @@ class Robot(MagicRobot):
                 self.elevator.set(EelevConst.Setpoint.L2)
         if self.operatorController.getRawButtonPressed(OperatorConstants.maxHeight):
             if self.intake.pos() < IntakeConstants.PosOut:
-                self.intake.x = IntakeConstants.PosOut
+                self.intake.x = IntakeConstants.PosL4
                 self.elevator.set(EelevConst.Setpoint.L3)
             else:
                 self.elevator.set(EelevConst.Setpoint.L3)
