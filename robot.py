@@ -133,7 +133,7 @@ class Robot(MagicRobot):
         # elevator movements
         if self.operatorController.getRawButtonPressed(OperatorConstants.home):
             if self.intake.pos() < IntakeConstants.PosOut:
-                self.intake.x = IntakeConstants.PosOut
+                self.intake.x = 4.5
                 self.elevator.set(EelevConst.Setpoint.HOME)
             else:
                 self.elevator.set(EelevConst.Setpoint.HOME)
