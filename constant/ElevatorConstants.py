@@ -9,11 +9,11 @@ LimitClass = DigitalInput
 
 Motor1 = [
     Motor1ID := 14,
-    Motor1Canbus := "intakebus",
+    #Motor1Canbus := "intakebus",
 ]
 Motor2 = [
     Motor2ID := 15,
-    Motor2Canbus := "intakebus",
+    #Motor2Canbus := "intakebus",
 ]
 LimitID = 0
 

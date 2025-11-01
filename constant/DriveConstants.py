@@ -1,6 +1,6 @@
 from constant import TunerConstants
 
-vel_dampen = 0.55
+vel_dampen = 0.60
 max_vel = TunerConstants.speed_at_12_volts * vel_dampen
 vel_deadband = max_vel * 0.02
 

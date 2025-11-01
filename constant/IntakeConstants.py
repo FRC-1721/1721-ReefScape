@@ -7,13 +7,13 @@ import phoenix6
 PosMotorClass = phoenix6.hardware.talon_fx.TalonFX
 PosMotor = [
     PosMotorID := 31,
-    PosMotorCANBus := "intakebus",
+    #PosMotorCANBus := "intakebus",
 ]
 
 IntakeMotorClass = phoenix6.hardware.talon_fx.TalonFX
 IntakeMotor = [
     IntakeMotorID := 35,
-    IntakeMotorCANBus := "intakebus",
+    #IntakeMotorCANBus := "intakebus",
 ]
 
 PIDConfig = phoenix6.configs.Slot0Configs()
